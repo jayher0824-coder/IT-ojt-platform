@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="cache-buster" content="2025112408">
+    <title>IT OJT SkillMatch - Skill-Based Job Matching</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Brand Color Override - #56AE67 */
+        :root {
+            --brand-primary: #56AE67;
+            --brand-hover: #3d8b4f;
+            --brand-dark: #2d6b3c;
+            --brand-light: #6bc481;
+            --brand-lighter: #7dd091;
+        }
+        
+        /* Override all blue colors with brand green */
+        .bg-blue-600, .bg-[#56AE67] { background-color: var(--brand-primary) !important; }
+        .bg-blue-700, .bg-[#3d8b4f] { background-color: var(--brand-hover) !important; }
+        .hover\:bg-blue-700:hover, .hover\:bg-[#3d8b4f]:hover { background-color: var(--brand-hover) !important; }
+        .hover\:bg-blue-800:hover, .hover\:bg-[#2d6b3c]:hover { background-color: var(--brand-dark) !important; }
+        .from-blue-600, .from-[#56AE67] { --tw-gradient-from: var(--brand-primary); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(86, 174, 103, 0)); }
+        .to-blue-700, .to-[#3d8b4f] { --tw-gradient-to: var(--brand-hover); }
+        .hover\:from-blue-700:hover, .hover\:from-[#3d8b4f]:hover { --tw-gradient-from: var(--brand-hover); }
+        .hover\:to-blue-800:hover, .hover\:to-[#2d6b3c]:hover { --tw-gradient-to: var(--brand-dark); }
+        
+        /* Ensure buttons with brand color are visible in light mode */
+        button.bg-\[#56AE67\] { 
+            background-color: #56AE67 !important; 
+            color: white !important;
+        }
+        button.bg-\[#56AE67\]:hover { 
+            background-color: #3d8b4f !important; 
+        }
+        
+        /* Ensure gradient buttons are visible */
+        button.bg-gradient-to-r {
+            background-image: linear-gradient(to right, #56AE67, #3d8b4f) !important;
+            color: white !important;
+        }
+        button.bg-gradient-to-r:hover {
+            background-image: linear-gradient(to right, #3d8b4f, #2d6b3c) !important;
+        }
+        
+        /* Ensure form tabs are visible */
+        .from-\[#56AE67\] { 
+            --tw-gradient-from: #56AE67 !important;
+        }
+        .to-\[#3d8b4f\] { 
+            --tw-gradient-to: #3d8b4f !important;
+        }
+        .hover\:from-\[#3d8b4f\]:hover { 
+            --tw-gradient-from: #3d8b4f !important;
+        }
+        .hover\:to-\[#2d6b3c\]:hover { 
+            --tw-gradient-to: #2d6b3c !important;
+        }
+        
+        /* Override purple/blue text colors ONLY for navigation and buttons - NOT badges */
+        button .text-purple-600, nav .text-purple-600 { color: var(--brand-primary) !important; }
+        button .text-purple-400, nav .text-purple-400 { color: var(--brand-light) !important; }
+        button:hover .text-purple-800, nav button:hover .text-purple-800 { color: var(--brand-dark) !important; }
+        button:hover .text-purple-300, nav button:hover .text-purple-300 { color: var(--brand-lighter) !important; }
+        
+        .text-blue-600, .text-[#56AE67] { color: var(--brand-primary) !important; }
+        .text-blue-700, .text-[#3d8b4f] { color: var(--brand-hover) !important; }
+        .text-blue-800, .text-[#2d6b3c] { color: var(--brand-dark) !important; }
+        .text-blue-500, .text-[#56AE67] { color: var(--brand-primary) !important; }
+        .text-blue-400, .text-[#6bc481] { color: var(--brand-light) !important; }
+        .text-blue-300, .text-[#7dd091] { color: var(--brand-lighter) !important; }
+        .hover\:text-blue-800:hover, .hover\:text-[#2d6b3c]:hover { color: var(--brand-dark) !important; }
+        .hover\:text-blue-300:hover, .hover\:text-[#7dd091]:hover { color: var(--brand-lighter) !important; }
+        
+        .border-blue-500, .border-[#56AE67] { border-color: var(--brand-primary) !important; }
+        .focus\:border-blue-500:focus, .focus\:border-[#56AE67]:focus { border-color: var(--brand-primary) !important; }
+        
+        /* Dark Mode Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        .dark {
+            --bg-primary: #1f2937;
+            --bg-secondary: #111827;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --border-color: #374151;
+        }
+
+        /* Apply dark mode styles */
+        body {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark body {
+            background-color: #111827;
+        }
+
+        .bg-white {
+            background-color: var(--bg-primary);
+        }
+
+        .dark .bg-white {
+            background-color: #1f2937;
+        }
+
+        .text-gray-600 {
+            color: var(--text-secondary);
+        }
+
+        .dark .text-gray-600 {
+            color: #9ca3af;
+        }
+
+        .text-gray-700 {
+            color: var(--text-primary);
+        }
+
+        .dark .text-gray-700 {
+            color: #f9fafb;
+        }
+
+        .border {
+            border-color: var(--border-color);
+        }
+
+        .dark .border {
+            border-color: #374151;
+        }
+
+        /* Enhanced dark mode input fields */
+        .dark input:not([type="checkbox"]):not([type="radio"]),
+        .dark textarea,
+        .dark select {
+            background-color: #374151 !important;
+            border-color: #4b5563 !important;
+            color: #f9fafb !important;
+        }
+
+        .dark input::placeholder,
+        .dark textarea::placeholder {
+            color: #9ca3af !important;
+            opacity: 1 !important;
+        }
+
+        .dark input:focus,
+        .dark textarea:focus,
+        .dark select:focus {
+            background-color: #374151 !important;
+            border-color: #56AE67 !important;
+        }
+
+        /* Ensure modal inputs and selects have dark backgrounds */
+        .dark #all-applicant-search,
+        .dark #all-job-filter,
+        .dark #all-status-filter,
+        .dark #all-date-filter {
+            background-color: #374151 !important;
+            color: #f9fafb !important;
+            border-color: #4b5563 !important;
+        }
+
+        .dark #all-applicant-search::placeholder {
+            color: #9ca3af !important;
+            opacity: 1 !important;
+        }
+
+        /* Edit job modal fields */
+        .dark #edit-job-form input,
+        .dark #edit-job-form select,
+        .dark #edit-job-form textarea {
+            background-color: #374151 !important;
+            color: #f9fafb !important;
+            border-color: #4b5563 !important;
+        }
+
+        .dark #edit-job-form input::placeholder,
+        .dark #edit-job-form textarea::placeholder {
+            color: #9ca3af !important;
+            opacity: 1 !important;
+        }
+
+        /* Enhanced dark mode for buttons and overlays */
+        .dark button {
+            background-color: #374151;
+            color: #f9fafb;
+            border-color: #4b5563;
+        }
+
+        .dark button:hover {
+            background-color: #4b5563;
+        }
+
+        .dark .bg-green-600 {
+            background-color: #16a34a;
+        }
+
+        .dark .bg-green-600:hover {
+            background-color: #15803d;
+        }
+
+        .dark .bg-red-600 {
+            background-color: #dc2626;
+        }
+
+        .dark .bg-red-600:hover {
+            background-color: #b91c1c;
+        }
+
+        .dark .bg-gray-500 {
+            background-color: #6b7280;
+        }
+
+        .dark .bg-gray-500:hover {
+            background-color: #4b5563;
+        }
+
+        .dark .bg-purple-600 {
+            background-color: #9333ea;
+        }
+
+        .dark .bg-purple-600:hover {
+            background-color: #7c3aed;
+        }
+
+        /* Modal overlays */
+        .dark #login-modal {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Fix for any remaining white backgrounds */
+        .dark .bg-gray-50 {
+            background-color: #374151;
+        }
+
+        .dark .bg-gray-100 {
+            background-color: #1f2937;
+        }
+
+        .dark .bg-gray-200 {
+            background-color: #374151;
+        }
+
+        /* Text colors for dark mode */
+        .dark .text-gray-900 {
+            color: #f9fafb;
+        }
+
+        .dark .text-gray-800 {
+            color: #f3f4f6;
+        }
+
+        .dark .text-gray-500 {
+            color: #9ca3af;
+        }
+
+        .dark .text-gray-400 {
+            color: #d1d5db;
+        }
+
+        /* Border colors */
+        .dark .border-gray-200 {
+            border-color: #374151;
+        }
+
+        .dark .border-gray-300 {
+            border-color: #4b5563;
+        }
+
+        /* Specific fixes for dashboard elements */
+        .dark .bg-blue-100 {
+            background-color: #1e3a8a;
+        }
+
+        .dark .bg-green-100 {
+            background-color: #14532d;
+        }
+
+        .dark .bg-purple-100 {
+            background-color: #581c87;
+        }
+
+        .dark .bg-yellow-100 {
+            background-color: #92400e;
+        }
+
+        .dark .text-[#56AE67] {
+            color: #60a5fa;
+        }
+
+        .dark .text-green-600 {
+            color: #34d399;
+        }
+
+        .dark .text-purple-600 {
+            color: #a78bfa;
+        }
+
+        .dark .text-yellow-600 {
+            color: #fbbf24;
+        }
+
+        .dark .text-red-600 {
+            color: #f87171;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #56AE67 0%, #3d8b4f 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .dark .card-hover:hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+        }
+        .skill-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            margin: 2px;
+            background-color: #56AE67;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #56AE67;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .dark .loading {
+            border-color: #374151;
+            border-top-color: #56AE67;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+/* Utility overrides for dark mode */
+        .dark .text-gray-500 { color:#9ca3af !important; }
+        .dark .text-gray-600 { color:#d1d5db !important; }
+        .dark .text-gray-700 { color:#f3f4f6 !important; }
+        .dark .bg-white { background-color:#1f2937 !important; }
+        /* Dark mode input styles */
+        .dark input, .dark textarea, .dark select {
+            background-color: #374151;
+            color: #f9fafb;
+            border-color: #4b5563;
+        }
+        
+        .dark input:focus, .dark textarea:focus, .dark select:focus {
+            border-color: #56AE67;
+        }
+        
+        /* Global dark mode text color override */
+        body.dark, html.dark {
+            color: var(--text-primary) !important;
+        }
+        body.dark p, body.dark span, body.dark label, body.dark a, body.dark li, body.dark div {
+            color: var(--text-primary) !important;
+        }
+
+        /* Links */
+        a {
+            color: #56AE67;
+        }
+        body.dark a {
+            color: #6bc481;
+        }
+        /* Buttons */
+        button {
+            color: var(--text-primary);
+        }
+        /* Skill badges */
+        .skill-badge {
+            background-color: #56AE67;
+        }
+        body.dark .skill-badge {
+            background-color: #56AE67;
+        }
+        /* Cards */
+        .card-hover {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        /* Table text */
+        table, th, td {
+            color: var(--text-primary);
+        }
+        /* Inputs */
+        input, textarea, select {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+        body.dark input, body.dark textarea, body.dark select {
+            background-color: #374151;
+            color: #f9fafb;
+            border-color: #4b5563;
+        }
+        /* Toast notifications */
+        #toast-container div {
+            color: white !important;
+        }
+
+        /* Additional dark mode overrides for backgrounds and borders */
+        .dark .bg-gray-50 { background-color: #374151 !important; }
+        .dark .bg-gray-100 { background-color: #1f2937 !important; }
+        .dark .bg-gray-200 { background-color: #374151 !important; }
+        .dark .border-gray-200 { border-color: #374151 !important; }
+        .dark .border-gray-300 { border-color: #4b5563 !important; }
+        .dark .border-gray-400 { border-color: #6b7280 !important; }
+        .dark .text-gray-500 { color: #9ca3af !important; }
+        .dark .text-gray-600 { color: #d1d5db !important; }
+        .dark .text-gray-700 { color: #f3f4f6 !important; }
+        .dark .text-gray-800 { color: #e5e7eb !important; }
+        .dark .text-gray-900 { color: #f9fafb !important; }
+
+        /* Ensure all modal backgrounds are dark */
+        .dark #login-modal > div {
+            background-color: #1f2937 !important;
+        }
+
+        .dark #login-modal > div > div {
+            background-color: #1f2937 !important;
+        }
+
+        .dark #student-registration-modal > div {
+            background-color: #1f2937 !important;
+        }
+
+        .dark #student-registration-modal > div > div {
+            background-color: #1f2937 !important;
+        }
+
+        /* Ensure modal content areas maintain dark background */
+        .dark #modal-content {
+            background-color: #1f2937 !important;
+        }
+
+        /* Force all borders in dark mode to be dark */
+        .dark * {
+            border-color: #374151 !important;
+        }
+
+        /* Override for specific elements that might remain white */
+        .dark .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05) !important;
+        }
+
+        /* IT Assessment Categories Grid Styles */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 10px;
+            }
+            
+            .grid-item {
+                min-height: 240px;
+                padding: 25px 20px;
+            }
+        }
+
+        .grid-item {
+            color: white;
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Dark mode hover effect */
+        .dark .grid-item:hover {
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .grid-item i {
+            font-size: 50px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+        }
+
+        .grid-item h3 {
+            margin: 15px 0 10px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .grid-item p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Gradient backgrounds */
+        .python { background: linear-gradient(135deg, #a8e063, #56ab2f); }
+        .java { background: linear-gradient(135deg, #36d1dc, #5b86e5); }
+        .cpp { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+        .javascript { background: linear-gradient(135deg, #f7971e, #ffd200); color: #333; }
+        .csharp { background: linear-gradient(135deg, #6441a5, #2a0845); }
+        .php { background: linear-gradient(135deg, #7f00ff, #e100ff); }
+        .ruby { background: linear-gradient(135deg, #f00000, #dc281e); }
+        .swift { background: linear-gradient(135deg, #ff9966, #ff5e62); }
+        .go { background: linear-gradient(135deg, #00c9ff, #92fe9d); color: #333; }
+
+        /* NEW Languages */
+        .rust { background: linear-gradient(135deg, #b06ab3, #4568dc); }
+        .kotlin { background: linear-gradient(135deg, #f7971e, #ffd200, #ff5f6d); }
+        .typescript { background: linear-gradient(135deg, #007acc, #00c6ff); }
+
+        /* Assessment Category Gradient Backgrounds */
+        .programming { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .database { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .webDevelopment { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .networking { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .problemSolving { background: linear-gradient(135deg, #fa709a, #fee140); }
+
+        /* Navigation active state */
+        .nav-item.active {
+            background-color: #3b82f6 !important;
+            color: white !important;
+        }
+        
+        .dark .nav-item.active {
+            background-color: #2563eb !important;
+        }
+
+    /* Language-specific result display styles */
+    .result-python { background: linear-gradient(135deg, #a8e063, #56ab2f); color: white; }
+    .result-java { background: linear-gradient(135deg, #36d1dc, #5b86e5); color: white; }
+    .result-cpp { background: linear-gradient(135deg, #00c6ff, #0072ff); color: white; }
+    .result-javascript { background: linear-gradient(135deg, #f7971e, #ffd200); color: #333; }
+    .result-csharp { background: linear-gradient(135deg, #6441a5, #2a0845); color: white; }
+    .result-php { background: linear-gradient(135deg, #7f00ff, #e100ff); color: white; }
+    .result-ruby { background: linear-gradient(135deg, #f00000, #dc281e); color: white; }
+    .result-swift { background: linear-gradient(135deg, #ff9966, #ff5e62); color: white; }
+    .result-go { background: linear-gradient(135deg, #00c9ff, #92fe9d); color: #333; }
+    .result-rust { background: linear-gradient(135deg, #b06ab3, #4568dc); color: white; }
+    .result-kotlin { background: linear-gradient(135deg, #f7971e, #ffd200, #ff5f6d); color: white; }
+    .result-typescript { background: linear-gradient(135deg, #007acc, #00c6ff); color: white; }
+
+    /* Custom Scrollbar Styles */
+    .scrollbar-custom {
+        overflow-y: auto !important;
+        scrollbar-width: thin;
+        scrollbar-color: #56AE67 #f1f1f1;
+    }
+    
+    .dark .scrollbar-custom {
+        scrollbar-color: #56AE67 #374151;
+    }
+    
+    .scrollbar-custom::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .dark .scrollbar-custom::-webkit-scrollbar-track {
+        background: #374151;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-thumb {
+        background: #56AE67;
+        border-radius: 10px;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+        background: #3d8b4f;
+    }
+
+    .dark .scrollbar-custom::-webkit-scrollbar-thumb {
+        background: #56AE67;
+    }
+
+    .dark .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+        background: #6bc481;
+    }
+    </style>
+</head>
+<body class="bg-gray-100" style="background-color: #f3f4f6;">
+    <!-- Loading overlay (added) -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="text-white text-lg flex items-center space-x-3">
+            <span>Loading…</span>
+            <span class="loading"></span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-[#56AE67] dark:text-[#6bc481]">
+                        <i class="fas fa-laptop-code mr-2"></i>
+                        IT OJT SkillMatch
+                    </h1>
+                </div>
+                <div id="nav-menu" class="flex space-x-4">
+                    <!-- Navigation items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- Main Content -->
+    <main id="main-content" class="min-h-screen">
+        <!-- Assessment Page -->
+        <div id="assessment-page" class="hidden container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Assessment Info -->
+                <div id="assessment-info" class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center mb-8">
+                    <div class="text-6xl text-[#56AE67] mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">IT Skills Assessment</h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        Welcome to the IT OJT Platform Skills Assessment! This assessment will evaluate your knowledge across various IT domains including programming, databases, web development, networking, and problem-solving.
+                    </p>
+                    <div class="bg-green-50 dark:bg-green-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                        <div class="flex items-center justify-center mb-2">
+                            <i class="fas fa-info-circle text-[#56AE67] mr-2"></i>
+                            <span class="font-semibold text-[#3d8b4f] dark:text-[#7dd091]">Assessment Details</span>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-4 text-sm">
+                            <div>
+                                <span class="font-medium">Questions:</span> 30
+                            </div>
+                            <div>
+                                <span class="font-medium">Time Limit:</span> 60 minutes
+                            </div>
+                            <div>
+                                <span class="font-medium">Passing Score:</span> 60%
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="startAssessment()" class="bg-[#56AE67] text-white px-8 py-3 rounded-lg hover:bg-[#3d8b4f] transition text-lg font-semibold">
+                        <i class="fas fa-play mr-2"></i>
+                        Start Assessment
+                    </button>
+                </div>
+
+
+
+                <!-- Assessment Questions -->
+                <div id="assessment-questions" class="hidden bg-white dark:bg-gray-800 rounded-lg shadow">
+                    <!-- Progress Bar -->
+                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                                Question <span id="current-question">1</span> of <span id="total-questions">30</span>
+                            </span>
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-300" id="question-category">Programming</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                            <div id="progress-bar" class="bg-[#56AE67] h-2 rounded-full transition-all duration-300" style="width: 3.33%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question Container -->
+                    <div id="question-container" class="p-6">
+                        <!-- Questions will be loaded here -->
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                        <div class="flex justify-between items-center">
+                            <button id="prev-btn" onclick="previousQuestion()" 
+                                class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed font-semibold border-2 border-gray-700 dark:border-gray-400"
+                                style="border: 2px solid #374151; z-index: 10; position: relative;">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Previous
+                            </button>
+                            <button id="next-btn" onclick="nextQuestion()" 
+                                class="bg-[#56AE67] text-white px-6 py-2 rounded-lg hover:bg-[#3d8b4f] transition font-semibold border-2 border-green-800 dark:border-green-600"
+                                style="background-color: #56AE67; color: white; border: 2px solid #2d6b3c; z-index: 10; position: relative;"
+                                onmouseover="this.style.backgroundColor='#3d8b4f'" 
+                                onmouseout="this.style.backgroundColor='#56AE67'">
+                                Next
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                            <button id="submit-btn" onclick="submitAssessment()" 
+                                class="hidden bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition font-semibold border-2 border-green-800 dark:border-green-600"
+                                style="background-color: #56AE67; color: white; border: 2px solid #2d6b3c; z-index: 10; position: relative;"
+                                onmouseover="this.style.backgroundColor='#3d8b4f'" 
+                                onmouseout="this.style.backgroundColor='#56AE67'">
+                                <i class="fas fa-check mr-2"></i>
+                                Submit Assessment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessment Results -->
+                <div id="assessment-results" class="hidden bg-white dark:bg-gray-800 rounded-lg shadow p-8">
+                    <div class="text-center mb-8">
+                        <div class="text-6xl text-green-500 mb-4">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Assessment Complete!</h2>
+                        <p class="text-gray-600 dark:text-gray-300">Here are your results</p>
+                    </div>
+
+                    <!-- Overall Score -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8 text-center">
+                        <div class="text-4xl font-bold text-[#56AE67] dark:text-[#6bc481] mb-2" id="overall-score">85%</div>
+                        <p class="text-gray-600 dark:text-gray-300">Overall Score</p>
+                    </div>
+
+                    <!-- Category Scores -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Category Breakdown</h3>
+                        <div id="category-scores">
+                            <!-- Category scores will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Verified Skills -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Verified Skills</h3>
+                        <div id="verified-skills" class="grid md:grid-cols-2 gap-4">
+                            <!-- Verified skills will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="text-center">
+                    <button onclick="continueToPlatform()" 
+                        style="background-color: #56AE67; color: white; border: 3px solid #2d6b3c;"
+                        class="px-8 py-3 rounded-lg transition text-lg font-semibold shadow-xl"
+                        onmouseover="this.style.backgroundColor='#3d8b4f'" 
+                        onmouseout="this.style.backgroundColor='#56AE67'">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Continue to SkillMatch
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Landing Page -->
+        <div id="landing-page" class="container mx-auto px-4 py-8 relative">
+            <!-- Hero Section -->
+            <div class="gradient-bg text-white text-center py-20 rounded-lg mb-12">
+                <h2 class="text-5xl font-bold mb-4">Find Your Perfect IT OJT Match</h2>
+                <p class="text-xl mb-8">Skill-based matching SkillMatch connecting students with the right opportunities</p>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="showLoginModal('student')" class="bg-white text-[#56AE67] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                        <i class="fas fa-user-graduate mr-2"></i>
+                        I'm a Student
+                    </button>
+                    <button onclick="showLoginModal('company')" class="bg-white border-2 border-[#56AE67] text-[#56AE67] px-8 py-3 rounded-lg font-semibold hover:bg-[#56AE67] hover:text-white hover:border-[#56AE67] transition-all duration-300">
+                        <i class="fas fa-building mr-2"></i>
+                        I'm a Company
+                    </button>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-lg shadow card-hover text-center">
+                    <div class="text-4xl text-[#56AE67] mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Skill Assessment</h3>
+                    <p class="text-gray-600">Comprehensive evaluation of IT skills across multiple domains including programming, databases, and problem-solving.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow card-hover text-center">
+                    <div class="text-4xl text-green-500 mb-4">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Smart Matching</h3>
+                    <p class="text-gray-600">AI-powered algorithm matches students with jobs based on skills, preferences, and assessment scores.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow card-hover text-center">
+                    <div class="text-4xl text-[#56AE67] mb-4">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Direct Connection</h3>
+                    <p class="text-gray-600">Companies can directly discover and recruit talented students based on verified skills and performance.</p>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div id="stats-section" class="bg-white p-8 rounded-lg shadow mb-12">
+                <h3 class="text-2xl font-bold text-center mb-8">SkillMatch Statistics</h3>
+                <div class="grid md:grid-cols-4 gap-6 text-center">
+                    <div>
+                        <div class="text-3xl font-bold text-[#56AE67]" id="total-jobs">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <p class="text-gray-600">Active Jobs</p>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-green-600" id="total-companies">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <p class="text-gray-600">Companies</p>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-[#56AE67]" id="total-applications">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <p class="text-gray-600">Applications</p>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-red-600" id="total-skills">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <p class="text-gray-600">Skills Assessed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Student Dashboard -->
+        <div id="student-dashboard" class="hidden container mx-auto px-4 py-8">
+            <!-- Dashboard Content will be populated by JavaScript -->
+        </div>
+
+        <!-- Company Dashboard -->
+        <div id="company-dashboard" class="hidden container mx-auto px-4 py-8">
+            <!-- Dashboard Content will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50 overflow-y-auto p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-4xl max-h-screen overflow-y-auto my-8">
+            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white dark:bg-gray-800 pb-4 border-b">
+                <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white">Login</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 z-10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modal-content" class="pb-4">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Registration Modal -->
+    <div id="student-registration-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50 overflow-y-auto p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-screen overflow-y-auto my-8">
+            <div class="flex justify-between items-center mb-6 sticky top-0 bg-white dark:bg-gray-800 pb-4 border-b">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Student Registration</h3>
+                <button onclick="closeStudentRegistrationModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 z-10">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="student-registration-form" onsubmit="handleStudentRegistration(event)" class="space-y-4">
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                        Email (Fatima Student Account)
+                    </label>
+                    <input type="email" id="reg-email" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="your.email@student.fatima.edu.ph">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Must be a Fatima student Google account (@student.fatima.edu.ph)</p>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                        Password
+                    </label>
+                    <input type="password" id="reg-password" required minlength="6" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Minimum 6 characters</p>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                        Student ID
+                    </label>
+                    <input type="text" id="reg-student-id" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="Enter your student ID">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                        Personal Phone Number
+                    </label>
+                    <input type="tel" id="reg-phone" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="+63xxxxxxxxxx">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                        House Address
+                    </label>
+                    <input type="text" id="reg-street" required class="w-full mb-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="Street Address">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="reg-city" required class="px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="City">
+                        <input type="text" id="reg-state" required class="px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="State/Province">
+                    </div>
+                    <input type="text" id="reg-zip" required class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600" placeholder="ZIP Code">
+                </div>
+
+                <button type="submit" class="w-full bg-[#56AE67] text-white py-2 px-4 rounded-lg hover:bg-[#3d8b4f] transition flex items-center justify-center">
+                    <span class="loading hidden mr-2">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                    <span id="reg-submit-text">Register</span>
+                </button>
+            </form>
+
+            <div id="reg-message" class="mt-4 text-center"></div>
+        </div>
+    </div>
+
+
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50">
+        <!-- Toast notifications will be added here -->
+    </div>
+
+    <!-- JavaScript -->
+    <!-- Inline minimal fallbacks (prevents "Unexpected token '<'"/missing helpers crash) -->
+    <script>
+        // Minimal safe shims so app.js can run even if helpers.js failed to load
+        window.validateAPIConfiguration = window.validateAPIConfiguration || function () {
+            console.warn('validateAPIConfiguration() fallback active.');
+            return true;
+        };
+        window.apiCall = window.apiCall || (async function () {
+            throw new Error('apiCall() fallback: helpers.js missing. Ensure js/helpers.js is served at /js/helpers.js');
+        });
+        window.loadPlatformStats = window.loadPlatformStats || function () { /* no-op */ };
+        window.loadAssessmentSection = window.loadAssessmentSection || function () {
+            if (typeof startAssessment === 'function') return startAssessment();
+            if (typeof showAssessmentPage === 'function') return showAssessmentPage();
+            if (typeof showToast === 'function') showToast('Assessment not available', 'warning');
+        };
+    </script>
+
+    <!-- Load helpers and app scripts with cache busting -->
+    <script src="./js/helpers.js?v=2025112410"></script>
+    <script src="./js/app.js?v=2025112411"></script>
+    <script src="./js/dashboard.js?v=2025112410"></script>
+    <script src="./js/assessment.js?v=2025112410"></script>
+    <script src="./js/customAssessments.js?v=2025112410"></script>
+  <!-- Student Profile Modal -->
+  <div id="student-profile-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl p-6 overflow-y-auto max-h-[90vh]">
+      <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Edit Profile</h3>
+      <form id="student-profile-form" class="space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">First Name</label>
+            <input name="firstName" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Last Name</label>
+            <input name="lastName" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Date of Birth</label>
+            <input name="dateOfBirth" type="date" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Phone</label>
+            <input name="phone" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          </div>
+        </div>
+        <!-- Address -->
+        <div>
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300">Address</label>
+          <input name="address[street]" placeholder="Street" class="w-full mb-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          <div class="grid md:grid-cols-3 gap-2">
+            <input name="address[city]" placeholder="City" class="px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+            <input name="address[state]" placeholder="State" class="px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+            <input name="address[zip]" placeholder="ZIP" class="px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          </div>
+        </div>
+        <!-- Education -->
+        <div>
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300">Education</label>
+          <input name="education[school]" placeholder="School/University" class="w-full mb-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          <input name="education[degree]" placeholder="Degree" class="w-full mb-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          <input name="education[year]" placeholder="Graduation Year" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+        </div>
+        <!-- Portfolio Links -->
+        <div>
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300">Portfolio / Links</label>
+          <input name="portfolio[github]" placeholder="GitHub URL" class="w-full mb-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          <input name="portfolio[linkedin]" placeholder="LinkedIn URL" class="w-full mb-2 px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          <input name="portfolio[website]" placeholder="Personal Website" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white dark:border-gray-600">
+        </div>
+        <!-- File Uploads -->
+        <div class="grid md:grid-cols-2 gap-4 items-center">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Resume (PDF/DOC)</label>
+            <input id="resume-input" type="file" accept=".pdf,.doc,.docx" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300">Avatar (Image)</label>
+            <input id="avatar-input" type="file" accept="image/*" class="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+          </div>
+        </div>
+        <div class="flex justify-end space-x-3 pt-4">
+          <button type="button" onclick="closeStudentProfileModal()" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-[#56AE67] text-white hover:bg-[#3d8b4f] dark:bg-[#3d8b4f] dark:hover:bg-[#56AE67]">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

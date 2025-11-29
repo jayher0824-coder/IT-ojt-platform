@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test Page - IT OJT SkillMatch</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Dark Mode Variables */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        .dark {
+            --bg-primary: #1f2937;
+            --bg-secondary: #111827;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --border-color: #374151;
+        }
+
+        /* Apply dark mode styles */
+        body {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark body {
+            background-color: #111827;
+        }
+
+        .bg-white {
+            background-color: var(--bg-primary);
+        }
+
+        .dark .bg-white {
+            background-color: #1f2937;
+        }
+
+        .text-gray-600 {
+            color: var(--text-secondary);
+        }
+
+        .dark .text-gray-600 {
+            color: #9ca3af;
+        }
+
+        .text-gray-700 {
+            color: var(--text-primary);
+        }
+
+        .dark .text-gray-700 {
+            color: #f9fafb;
+        }
+
+        .border {
+            border-color: var(--border-color);
+        }
+
+        .dark .border {
+            border-color: #374151;
+        }
+
+        /* Additional dark mode overrides for backgrounds and borders */
+        .dark .bg-gray-50 { background-color: #374151 !important; }
+        .dark .bg-gray-100 { background-color: #1f2937 !important; }
+        .dark .bg-gray-200 { background-color: #374151 !important; }
+        .dark .border-gray-200 { border-color: #374151 !important; }
+        .dark .border-gray-300 { border-color: #4b5563 !important; }
+        .dark .border-gray-400 { border-color: #6b7280 !important; }
+        .dark .text-gray-500 { color: #9ca3af !important; }
+        .dark .text-gray-600 { color: #d1d5db !important; }
+        .dark .text-gray-700 { color: #f3f4f6 !important; }
+        .dark .text-gray-800 { color: #e5e7eb !important; }
+        .dark .text-gray-900 { color: #f9fafb !important; }
+
+        /* Specific overrides for test-login page */
+        .dark .bg-red-50 { background-color: #7f1d1d !important; }
+        .dark .bg-green-50 { background-color: #1e3a8a !important; }
+        .dark .bg-green-50 { background-color: #14532d !important; }
+        .dark .bg-yellow-100 { background-color: #92400e !important; }
+        .dark .bg-red-100 { background-color: #7f1d1d !important; }
+        .dark .bg-green-100 { background-color: #14532d !important; }
+        .dark .border-red-400 { border-color: #dc2626 !important; }
+        .dark .border-yellow-400 { border-color: #f59e0b !important; }
+        .dark .border-green-400 { border-color: #10b981 !important; }
+        .dark .text-red-700 { color: #fca5a5 !important; }
+        .dark .text-yellow-700 { color: #fcd34d !important; }
+        .dark .text-green-700 { color: #a7f3d0 !important; }
+        .dark .text-[#56AE67] { color: #60a5fa !important; }
+        .dark .text-red-600 { color: #f87171 !important; }
+        .dark .text-purple-600 { color: #a78bfa !important; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
+                <i class="fas fa-laptop-code mr-2 text-purple-600"></i>
+                IT OJT SkillMatch - Login Test
+            </h1>
+            
+            <!-- Test Accounts Info -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">
+                    <i class="fas fa-info-circle mr-2 text-[#56AE67]"></i>
+                    Test Account Credentials
+                </h2>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-red-50 p-4 rounded-lg border">
+                        <h3 class="font-semibold text-red-700 mb-2">
+                            <i class="fas fa-user-shield mr-1"></i>Admin
+                        </h3>
+                        <p class="text-sm text-gray-600">Email: admin@itojtskillmatch.com</p>
+                        <p class="text-sm text-gray-600">Password: admin123</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg border">
+                        <h3 class="font-semibold text-[#3d8b4f] mb-2">
+                            <i class="fas fa-user-graduate mr-1"></i>Students
+                        </h3>
+                        <p class="text-xs text-gray-600">jayher0824@gmail.com</p>
+                        <p class="text-xs text-gray-600">jhernandez6129val@fatima.student.edu.ph</p>
+                        <p class="text-sm font-medium text-[#3d8b4f]">Password: student123</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg border">
+                        <h3 class="font-semibold text-green-700 mb-2">
+                            <i class="fas fa-building mr-1"></i>Company
+                        </h3>
+                        <p class="text-sm text-gray-600">Email: jaydugyot2.0@gmail.com</p>
+                        <p class="text-sm text-gray-600">Password: company123</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Login Buttons -->
+            <div class="grid md:grid-cols-3 gap-4 mb-8">
+                <button onclick="quickLogin('admin@itojtskillmatch.com', 'admin123')"
+                        class="bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 transition">
+                    <i class="fas fa-user-shield mr-2"></i>
+                    Login as Admin
+                </button>
+                <button onclick="quickLogin('jayher0824@gmail.com', 'student123')" 
+                        class="bg-[#56AE67] text-white px-4 py-3 rounded-lg hover:bg-[#3d8b4f] transition">
+                    <i class="fas fa-user-graduate mr-2"></i>
+                    Login as Student
+                </button>
+                <button onclick="quickLogin('jaydugyot2.0@gmail.com', 'company123')" 
+                        class="bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition">
+                    <i class="fas fa-building mr-2"></i>
+                    Login as Company
+                </button>
+            </div>
+
+            <!-- Manual Login Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">
+                    <i class="fas fa-sign-in-alt mr-2 text-purple-500"></i>
+                    Manual Login Test
+                </h2>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+                        <input type="email" id="email" required 
+                               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]"
+                               placeholder="Enter email address">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+                        <input type="password" id="password" required 
+                               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]"
+                               placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Test Login
+                    </button>
+                </form>
+            </div>
+
+            <!-- Result Display -->
+            <div id="result" class="mt-6"></div>
+
+            <!-- Navigation Links -->
+            <div class="text-center mt-8 space-x-4">
+                <a href="/" class="text-[#56AE67] hover:text-[#2d6b3c]">
+                    <i class="fas fa-home mr-1"></i>Main Site
+                </a>
+                <a href="/admin" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-user-shield mr-1"></i>Admin Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quick login function
+        async function quickLogin(email, password) {
+            await testLogin(email, password);
+        }
+
+        // Manual form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            await testLogin(email, password);
+        });
+
+        // Test login function
+        async function testLogin(email, password) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">Testing login...</div>';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                            <h3 class="font-bold"><i class="fas fa-check-circle mr-2"></i>Login Successful!</h3>
+                            <p><strong>User:</strong> ${data.data.user.email}</p>
+                            <p><strong>Role:</strong> ${data.data.user.role}</p>
+                            <p><strong>Active:</strong> ${data.data.user.isActive}</p>
+                            ${data.requiresAssessment ? '<p class="text-orange-600 font-medium">⚠️ Assessment Required</p>' : ''}
+                            <div class="mt-2">
+                                <button onclick="redirectToDashboard('${data.data.user.role}')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                                    Go to Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    // Store token for potential dashboard access
+                    localStorage.setItem('authToken', data.data.token);
+                    localStorage.setItem('userData', JSON.stringify(data.data.user));
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                            <h3 class="font-bold"><i class="fas fa-times-circle mr-2"></i>Login Failed!</h3>
+                            <p>${data.message}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <h3 class="font-bold"><i class="fas fa-exclamation-triangle mr-2"></i>Error!</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Redirect to appropriate dashboard
+        function redirectToDashboard(role) {
+            if (role === 'admin') {
+                window.location.href = '/admin';
+            } else {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>

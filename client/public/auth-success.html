@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Logging In...</title>
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token');
+      const email = params.get('email');
+      const role = params.get('role');
+      if (token && email) {
+        const userData = { email, role };
+        // Use sessionStorage for tab-specific sessions
+        sessionStorage.setItem('authToken', token);
+        sessionStorage.setItem('userData', JSON.stringify(userData));
+        // Add a flag to indicate this is a Google OAuth success
+        sessionStorage.setItem('googleOAuthSuccess', 'true');
+        // Redirect to home page (dashboard will load automatically)
+        window.location.href = '/';
+      } else {
+        // Fallback
+        window.location.href = '/?googleAuth=failed';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <p>Authenticating with Google...</p>
+</body>
+</html>

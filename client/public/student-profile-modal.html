@@ -1,0 +1,67 @@
+<!-- Student Profile Modal -->
+<div id="student-profile-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-50 flex items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl p-6 overflow-y-auto max-h-[90vh]">
+    <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Edit Profile</h3>
+    <form id="student-profile-form" class="space-y-4">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">First Name</label>
+          <input name="firstName" type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Last Name</label>
+          <input name="lastName" type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Date of Birth</label>
+          <input name="dateOfBirth" type="date" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Phone</label>
+          <input name="phone" type="text" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        </div>
+      </div>
+      <!-- Address -->
+      <div>
+        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Address</label>
+        <input name="address[street]" placeholder="Street" class="w-full mb-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        <div class="grid md:grid-cols-3 gap-2">
+          <input name="address[city]" placeholder="City" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+          <input name="address[state]" placeholder="State" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+          <input name="address[zip]" placeholder="ZIP" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        </div>
+      </div>
+      <!-- Education -->
+      <div>
+        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Education</label>
+        <input name="education[school]" placeholder="School/University" class="w-full mb-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        <input name="education[degree]" placeholder="Degree" class="w-full mb-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        <input name="education[year]" placeholder="Graduation Year" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+      </div>
+      <!-- Portfolio Links -->
+      <div>
+        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Portfolio / Links</label>
+        <input name="portfolio[github]" placeholder="GitHub URL" class="w-full mb-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        <input name="portfolio[linkedin]" placeholder="LinkedIn URL" class="w-full mb-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        <input name="portfolio[website]" placeholder="Personal Website" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+      </div>
+      <!-- File Uploads -->
+      <div class="grid md:grid-cols-2 gap-4 items-center">
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Resume (PDF/DOC)</label>
+          <input id="resume-input" type="file" accept=".pdf,.doc,.docx" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Avatar (Image)</label>
+          <input id="avatar-input" type="file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-[#56AE67] dark:bg-gray-700 dark:text-white">
+        </div>
+      </div>
+      <div class="flex justify-end space-x-3 pt-4">
+        <button type="button" onclick="closeStudentProfileModal()" class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+        <button type="submit" class="px-4 py-2 rounded-lg bg-[#56AE67] text-white hover:bg-[#3d8b4f]">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

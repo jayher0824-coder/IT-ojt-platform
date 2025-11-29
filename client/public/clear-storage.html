@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Browser Storage - IT OJT Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .message {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            text-align: left;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-clear {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-clear:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-cancel:hover {
+            background: #d0d0d0;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .checkmark {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: left;
+            color: #856404;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkmark" id="icon">🔧</div>
+        <h1>Clear Browser Storage</h1>
+        <p class="subtitle">Fix infinite reload loop issue</p>
+        
+        <div class="message">
+            <strong>⚠️ Problem:</strong>
+            <br>Page keeps reloading in a loop? This happens when old authentication tokens are stored in your browser.
+            <br><br>
+            <strong>✅ Solution:</strong>
+            <br>Click the button below to clear old data and fix the issue.
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-clear" onclick="clearStorage()">🗑️ Clear Storage & Fix</button>
+            <button class="btn-cancel" onclick="goBack()">✕ Cancel</button>
+        </div>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="info-box">
+            <strong>ℹ️ What happens:</strong>
+            <br>• Old authentication data will be deleted
+            <br>• You'll be logged out
+            <br>• Page will refresh automatically
+            <br>• You can log in fresh with new credentials
+        </div>
+    </div>
+
+    <script>
+        function clearStorage() {
+            try {
+                // Clear all storage
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Show success message
+                const status = document.getElementById('status');
+                const icon = document.getElementById('icon');
+                
+                icon.textContent = '✅';
+                status.textContent = '✅ Storage cleared! Redirecting to home page...';
+                status.className = 'status success';
+                
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'http://localhost:3000';
+                }, 2000);
+                
+            } catch (error) {
+                const status = document.getElementById('status');
+                status.textContent = '❌ Error: ' + error.message;
+                status.className = 'status error';
+            }
+        }
+        
+        function goBack() {
+            window.location.href = 'http://localhost:3000';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,962 @@
+// Assessment State - store in window for persistence with protection
+(function() {
+    if (!window.assessmentState) {
+        console.log('Initializing assessmentState for the first time');
+        // Try to restore from sessionStorage first
+        try {
+            const saved = sessionStorage.getItem('assessmentState');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                window.assessmentState = {
+                    currentAssessment: parsed.currentAssessment,
+                    currentQuestionIndex: parsed.currentQuestionIndex || 0,
+                    userAnswers: parsed.userAnswers || [],
+                    assessmentStartTime: parsed.assessmentStartTime ? new Date(parsed.assessmentStartTime) : null
+                };
+                console.log('Restored assessment state from sessionStorage:', {
+                    hasAssessment: !!window.assessmentState.currentAssessment,
+                    questionIndex: window.assessmentState.currentQuestionIndex,
+                    answersCount: window.assessmentState.userAnswers.length
+                });
+                return;
+            }
+        } catch (e) {
+            console.error('Failed to restore from sessionStorage:', e);
+        }
+        
+        window.assessmentState = {
+            currentAssessment: null,
+            currentQuestionIndex: 0,
+            userAnswers: [],
+            assessmentStartTime: null
+        };
+        console.log('Created new empty assessmentState');
+    } else {
+        console.log('assessmentState already exists:', {
+            hasAssessment: !!window.assessmentState.currentAssessment,
+            questionIndex: window.assessmentState.currentQuestionIndex
+        });
+    }
+})();
+
+// Helper to save state to sessionStorage
+function saveAssessmentState() {
+    try {
+        const stateToSave = {
+            currentAssessment: window.assessmentState.currentAssessment,
+            currentQuestionIndex: window.assessmentState.currentQuestionIndex,
+            userAnswers: window.assessmentState.userAnswers,
+            assessmentStartTime: window.assessmentState.assessmentStartTime ? window.assessmentState.assessmentStartTime.toISOString() : null
+        };
+        sessionStorage.setItem('assessmentState', JSON.stringify(stateToSave));
+        console.log('Saved assessment state to sessionStorage');
+    } catch (e) {
+        console.error('Failed to save assessment state:', e);
+    }
+}
+
+// Helper to ensure state exists
+function ensureAssessmentState() {
+    if (!window.assessmentState || !window.assessmentState.currentAssessment) {
+        // Try to restore from sessionStorage
+        try {
+            const saved = sessionStorage.getItem('assessmentState');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                window.assessmentState = {
+                    currentAssessment: parsed.currentAssessment,
+                    currentQuestionIndex: parsed.currentQuestionIndex,
+                    userAnswers: parsed.userAnswers,
+                    assessmentStartTime: parsed.assessmentStartTime ? new Date(parsed.assessmentStartTime) : null
+                };
+                console.log('Recovered state from sessionStorage');
+                return true;
+            }
+        } catch (e) {
+            console.error('Failed to recover state:', e);
+        }
+        return false;
+    }
+    return true;
+}
+
+// Async recovery: try sync restore first, otherwise fetch assessments from server
+async function ensureAssessmentStateAsync() {
+    // Quick sync check
+    if (ensureAssessmentState()) return true;
+
+    // Attempt to recover by fetching assessments from server
+    try {
+        console.log('ensureAssessmentStateAsync: attempting server recovery');
+        if (!authToken) {
+            console.warn('No auth token available, cannot recover from server');
+            return false;
+        }
+        const response = await apiCall('/assessments');
+        const assessments = response.data || [];
+        if (!assessments || assessments.length === 0) {
+            console.warn('No assessments returned from server');
+            return false;
+        }
+
+        // Restore a reasonable default assessment state
+        window.assessmentState = window.assessmentState || {};
+        window.assessmentState.currentAssessment = assessments[0];
+        // Use full question set if available
+        window.assessmentState.currentAssessment.questions = window.assessmentState.currentAssessment.questions || [];
+        window.assessmentState.currentQuestionIndex = 0;
+        window.assessmentState.userAnswers = new Array(window.assessmentState.currentAssessment.questions.length).fill(null);
+        window.assessmentState.assessmentStartTime = new Date();
+
+        // Persist to sessionStorage
+        saveAssessmentState();
+        console.log('ensureAssessmentStateAsync: recovered state from server');
+        return true;
+    } catch (err) {
+        console.error('ensureAssessmentStateAsync: failed to recover from server', err);
+        return false;
+    }
+}
+
+// Note: currentPage is declared in app.js
+
+// Start assessment
+async function startAssessment(category = null) {
+    // Close any open modals before starting assessment
+    const openModals = document.querySelectorAll('.fixed.inset-0.bg-black.bg-opacity-50');
+    openModals.forEach(modal => modal.remove());
+    
+    // Remove any escape key handlers
+    if (window.studentAssessmentModalEscapeHandler) {
+        document.removeEventListener('keydown', window.studentAssessmentModalEscapeHandler);
+        window.studentAssessmentModalEscapeHandler = null;
+    }
+    
+    // Ensure the user is authenticated before attempting to fetch protected assessment data
+    if (!authToken) {
+        // Prompt login modal for student role as default
+        showToast('Please log in to start the assessment.', 'warning');
+        showLoginModal('student');
+        return;
+    }
+    try {
+        // Get available assessments
+        const response = await apiCall('/assessments');
+        const assessments = response.data;
+
+        if (assessments.length === 0) {
+            showToast('No assessments available. Please contact support.', 'error');
+            return;
+        }
+
+        // Choose assessment. If a category is requested, prefer an assessment whose
+        // `category` field matches; otherwise fall back to the first assessment.
+        let chosenAssessment = null;
+        if (category) {
+            chosenAssessment = assessments.find(a => a.category === category) || assessments[0];
+            console.log('startAssessment: chosen assessment by category:', chosenAssessment?.category, chosenAssessment?.title);
+        } else {
+            chosenAssessment = assessments[0];
+        }
+        window.assessmentState.currentAssessment = chosenAssessment;
+
+        // Helper: shuffle array in-place
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        let selected = [];
+
+        if (category) {
+            // If a specific category is selected, show only that category's questions
+            const catQs = window.assessmentState.currentAssessment.questions.filter(q => q.category === category);
+            shuffle(catQs);
+            selected = catQs.slice(0, 10); // Take 10 questions from the category
+            
+            // Update assessment title to reflect the category
+            const categoryNames = {
+                'programming': 'Programming',
+                'database': 'Database',
+                'webDevelopment': 'Web Development',
+                'networking': 'Networking',
+                'problemSolving': 'Problem Solving'
+            };
+            window.assessmentState.currentAssessment.title = `${categoryNames[category] || category} Assessment`;
+        } else {
+            // Build a 50-question set with 10 per category for 5 categories
+            const categories = ['programming', 'database', 'webDevelopment', 'networking', 'problemSolving'];
+            const perCategory = 10;
+            const remaining = [];
+
+            // Group and pick per category
+            categories.forEach(cat => {
+                const catQs = window.assessmentState.currentAssessment.questions.filter(q => q.category === cat);
+                shuffle(catQs);
+                const picked = catQs.slice(0, perCategory);
+                selected.push(...picked);
+                if (catQs.length > perCategory) remaining.push(...catQs.slice(perCategory));
+            });
+
+            // If we didn't reach 50 (in case of low supply), fill from remaining
+            if (selected.length < categories.length * perCategory) {
+                const allOthers = window.assessmentState.currentAssessment.questions.filter(q => !selected.find(s => s._id === q._id));
+                shuffle(allOthers);
+                selected.push(...allOthers.slice(0, categories.length * perCategory - selected.length));
+            }
+
+            // Final shuffle to mix categories
+            shuffle(selected);
+        }
+
+        window.assessmentState.currentAssessment.questions = selected;
+
+        window.assessmentState.currentQuestionIndex = 0;
+        // Initialize userAnswers array with correct length
+        window.assessmentState.userAnswers = new Array(selected.length).fill(null);
+        window.assessmentState.assessmentStartTime = new Date();
+        
+        // Save to sessionStorage as backup
+        saveAssessmentState();
+        
+        // Verify state was saved
+        console.log('Assessment loaded. State check:', {
+            windowStateExists: !!window.assessmentState,
+            hasCurrentAssessment: !!window.assessmentState?.currentAssessment,
+            questionCount: window.assessmentState?.currentAssessment?.questions?.length,
+            sessionStorageSize: sessionStorage.getItem('assessmentState')?.length
+        });
+        
+        showToast(`Loaded ${selected.length} questions`, 'success');
+
+        // Initialize UI
+        document.getElementById('student-dashboard').classList.add('hidden');
+        document.getElementById('assessment-page').classList.remove('hidden');
+        document.getElementById('assessment-info').classList.add('hidden');
+        document.getElementById('assessment-questions').classList.remove('hidden');
+
+        // Protect against copying/selecting
+        enableAssessmentAntiCheat();
+
+        // Set up questions
+        document.getElementById('total-questions').textContent = window.assessmentState.currentAssessment.questions.length;
+
+        // Show first question
+        await showQuestion(0);
+
+        currentPage = 'assessment-page';
+
+    } catch (error) {
+        console.error('Error starting assessment:', error);
+        showToast('Failed to start assessment. Please try again.', 'error');
+    }
+}
+
+
+
+// Anti-copy/selection protections within assessment page
+let antiCheatHandlers = [];
+function enableAssessmentAntiCheat() {
+    const container = document.getElementById('assessment-page');
+    if (!container) return;
+
+    // Prevent right-click context menu
+    const onContext = (e) => { if (e.target.closest('#assessment-page')) e.preventDefault(); };
+    // Prevent copy/cut/select
+    const onCopy = (e) => { if (e.target.closest('#assessment-page')) e.preventDefault(); };
+    const onCut = (e) => { if (e.target.closest('#assessment-page')) e.preventDefault(); };
+    const onSelectStart = (e) => { if (e.target.closest('#assessment-page')) e.preventDefault(); };
+    // Block Ctrl/Cmd+C and Ctrl/Cmd+X and text selection shortcuts
+    const onKeyDown = (e) => {
+        const inside = e.target && e.target.closest && e.target.closest('#assessment-page');
+        if (!inside) return;
+        const isMac = navigator.platform.toUpperCase().includes('MAC');
+        const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+        if (ctrlOrCmd && (e.key === 'c' || e.key === 'C' || e.key === 'x' || e.key === 'X' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+        }
+    };
+
+    document.addEventListener('contextmenu', onContext, true);
+    document.addEventListener('copy', onCopy, true);
+    document.addEventListener('cut', onCut, true);
+    document.addEventListener('selectstart', onSelectStart, true);
+    document.addEventListener('keydown', onKeyDown, true);
+
+    antiCheatHandlers = [
+        ['contextmenu', onContext],
+        ['copy', onCopy],
+        ['cut', onCut],
+        ['selectstart', onSelectStart],
+        ['keydown', onKeyDown],
+    ];
+}
+
+function disableAssessmentAntiCheat() {
+    antiCheatHandlers.forEach(([evt, handler]) => {
+        document.removeEventListener(evt, handler, true);
+    });
+    antiCheatHandlers = [];
+}
+
+
+
+async function showQuestion(index) {
+    // Ensure state exists, try to recover if missing
+    if (!(await ensureAssessmentStateAsync())) {
+        alert('ERROR: Assessment state is missing and could not be recovered!\nPlease restart the assessment.');
+        return;
+    }
+    
+    if (index < 0 || index >= window.assessmentState.currentAssessment.questions.length) {
+        showToast(`Error: Invalid index ${index}`, 'error');
+        return;
+    }
+    
+    window.assessmentState.currentQuestionIndex = index;
+    
+    // Save state after updating
+    saveAssessmentState();
+    
+    const question = window.assessmentState.currentAssessment.questions[index];
+    
+    // Update progress
+    const currentQuestionEl = document.getElementById('current-question');
+    const categoryEl = document.getElementById('question-category');
+    const progressBar = document.getElementById('progress-bar');
+    
+    if (!currentQuestionEl || !categoryEl || !progressBar) {
+        alert('Error: Cannot find progress display elements');
+        return;
+    }
+    
+    currentQuestionEl.textContent = index + 1;
+    categoryEl.textContent = capitalizeFirst(question.category);
+    const progress = ((index + 1) / window.assessmentState.currentAssessment.questions.length) * 100;
+    progressBar.style.width = progress + '%';
+    
+    // Render question
+    const questionContainer = document.getElementById('question-container');
+    
+    if (question.type === 'multiple-choice') {
+        questionContainer.innerHTML = `
+            <div class="mb-6">
+                <h4 class="text-lg font-semibold mb-4">${question.question}</h4>
+                <div class="space-y-3">
+                    ${question.options.map((option, optionIndex) => `
+                        <div class="flex items-center">
+                            <input type="radio" id="option-${optionIndex}" name="answer" value="${option}" 
+                                   class="mr-3" ${window.assessmentState.userAnswers[index] && window.assessmentState.userAnswers[index].answer === option ? 'checked' : ''}>
+                            <label for="option-${optionIndex}" class="text-gray-700 cursor-pointer flex-1 p-3 rounded-lg hover:bg-gray-50">
+                                ${option}
+                            </label>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } else if (question.type === 'true-false') {
+        questionContainer.innerHTML = `
+            <div class="mb-6">
+                <h4 class="text-lg font-semibold mb-4">${question.question}</h4>
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <input type="radio" id="option-true" name="answer" value="True" 
+                               class="mr-3" ${window.assessmentState.userAnswers[index] && window.assessmentState.userAnswers[index].answer === 'True' ? 'checked' : ''}>
+                        <label for="option-true" class="text-gray-700 cursor-pointer flex-1 p-3 rounded-lg hover:bg-gray-50">
+                            True
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="option-false" name="answer" value="False" 
+                               class="mr-3" ${window.assessmentState.userAnswers[index] && window.assessmentState.userAnswers[index].answer === 'False' ? 'checked' : ''}>
+                        <label for="option-false" class="text-gray-700 cursor-pointer flex-1 p-3 rounded-lg hover:bg-gray-50">
+                            False
+                        </label>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (question.type === 'short-answer') {
+        questionContainer.innerHTML = `
+            <div class="mb-6">
+                <h4 class="text-lg font-semibold mb-4">${question.question}</h4>
+                <textarea name="answer" placeholder="Enter your answer..." 
+                          class="w-full p-3 border rounded-lg focus:outline-none focus:border-[#56AE67]"
+                          rows="4">${window.assessmentState.userAnswers[index] ? window.assessmentState.userAnswers[index].answer : ''}</textarea>
+            </div>
+        `;
+    }
+    
+    // Update navigation buttons
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    
+    if (!prevBtn || !nextBtn || !submitBtn) {
+        alert('Error: Navigation buttons not found in DOM');
+        return;
+    }
+    
+    prevBtn.disabled = index === 0;
+    
+    if (index === window.assessmentState.currentAssessment.questions.length - 1) {
+        nextBtn.classList.add('hidden');
+        submitBtn.classList.remove('hidden');
+    } else {
+        nextBtn.classList.remove('hidden');
+        submitBtn.classList.add('hidden');
+    }
+}
+
+async function saveCurrentAnswer() {
+    if (!(await ensureAssessmentStateAsync())) return;
+
+    const answerInput = document.querySelector('input[name="answer"]:checked') || 
+                       document.querySelector('textarea[name="answer"]');
+
+    if (answerInput) {
+        const q = window.assessmentState.currentAssessment?.questions?.[window.assessmentState.currentQuestionIndex];
+        window.assessmentState.userAnswers[window.assessmentState.currentQuestionIndex] = {
+            questionIndex: window.assessmentState.currentQuestionIndex,
+            questionId: q?._id,
+            answer: (answerInput.value || '').trim()
+        };
+        saveAssessmentState(); // Save to sessionStorage
+    }
+}
+
+async function nextQuestion() {
+    console.log('=== nextQuestion called ===');
+    console.log('Before ensureState - window.assessmentState:', !!window.assessmentState);
+    console.log('Before ensureState - currentAssessment:', !!window.assessmentState?.currentAssessment);
+    
+    // Ensure state exists, try to recover if missing
+    if (!(await ensureAssessmentStateAsync())) {
+        console.error('FAILED TO ENSURE STATE');
+        alert('CRITICAL ERROR: Assessment state is missing and could not be recovered!\n\nPlease restart the assessment.');
+        return;
+    }
+    
+    console.log('After ensureState - State OK');
+    console.log('Questions available:', window.assessmentState.currentAssessment.questions.length);
+    
+    // Show visual feedback
+    const currentIndex = window.assessmentState.currentQuestionIndex;
+    const totalQuestions = window.assessmentState.currentAssessment.questions.length;
+    
+    showToast(`Q${currentIndex + 1}/${totalQuestions} - Moving next`, 'info');
+    
+    await saveCurrentAnswer();
+    
+    if (window.assessmentState.currentQuestionIndex < window.assessmentState.currentAssessment.questions.length - 1) {
+        const nextIndex = window.assessmentState.currentQuestionIndex + 1;
+        console.log('Moving to question', nextIndex + 1);
+        await showQuestion(nextIndex);
+        showToast(`Now on Q${nextIndex + 1}`, 'success');
+    } else {
+        showToast('This is the last question', 'warning');
+    }
+}
+
+async function previousQuestion() {
+    // Show visual feedback
+    showToast('Moving to previous question...', 'info');
+    
+    await saveCurrentAnswer();
+    if (window.assessmentState.currentQuestionIndex > 0) {
+        await showQuestion(window.assessmentState.currentQuestionIndex - 1);
+    } else {
+        showToast('This is the first question', 'warning');
+    }
+}
+
+// Expose functions globally to ensure they're accessible from HTML onclick handlers
+window.nextQuestion = nextQuestion;
+window.previousQuestion = previousQuestion;
+window.submitAssessment = submitAssessment;
+
+async function submitAssessment() {
+    // Ensure state and save current answer
+    if (!(await ensureAssessmentStateAsync())) {
+        alert('Error: Assessment state missing. Cannot submit.');
+        return;
+    }
+    await saveCurrentAnswer();
+    
+    // Check if all questions are answered
+    const unansweredQuestions = [];
+    for (let i = 0; i < window.assessmentState.currentAssessment.questions.length; i++) {
+        if (!window.assessmentState.userAnswers[i] || !window.assessmentState.userAnswers[i].answer) {
+            unansweredQuestions.push(i + 1);
+        }
+    }
+    
+    if (unansweredQuestions.length > 0) {
+        const proceed = confirm(`You have ${unansweredQuestions.length} unanswered questions. Do you want to submit anyway?`);
+        if (!proceed) {
+            return;
+        }
+    }
+    
+    try {
+        showToast('Submitting assessment...', 'info');
+        
+        // Filter out null answers and ensure all answers have proper structure
+        const validAnswers = window.assessmentState.userAnswers.map((answer, index) => {
+            if (!answer) {
+                // Create a default empty answer for unanswered questions
+                const question = window.assessmentState.currentAssessment?.questions?.[index];
+                return {
+                    questionIndex: index,
+                    questionId: question?._id || null,
+                    answer: null
+                };
+            }
+            return answer;
+        });
+        
+        // Log submission data for debugging
+        console.log('Submitting assessment:', {
+            assessmentId: window.assessmentState.currentAssessment._id,
+            answersCount: validAnswers.length,
+            validAnswersCount: validAnswers.filter(a => a && a.answer).length,
+            answers: validAnswers,
+            startedAt: window.assessmentState.assessmentStartTime
+        });
+        
+        const response = await apiCall(`/assessments/${window.assessmentState.currentAssessment._id}/submit`, {
+            method: 'POST',
+            body: JSON.stringify({
+                answers: validAnswers,
+                startedAt: window.assessmentState.assessmentStartTime.toISOString()
+            })
+        });
+        
+        console.log('Assessment submission response:', response);
+        showAssessmentResults(response.data);
+
+        // Attempt to refresh assessment history and profile so the new result shows up
+        try {
+            if (typeof loadAssessmentHistory === 'function') {
+                console.log('Refreshing assessment history after submission');
+                loadAssessmentHistory();
+            }
+            if (typeof loadStudentProfile === 'function') {
+                console.log('Refreshing student profile after submission');
+                loadStudentProfile();
+            }
+        } catch (e) {
+            console.warn('Failed to refresh history/profile after submission', e);
+        }
+        
+    } catch (error) {
+        console.error('Error submitting assessment:', error);
+        console.error('Error details:', {
+            message: error.message,
+            stack: error.stack,
+            response: error.response
+        });
+        showToast('Server error: ' + (error.message || 'Failed to submit assessment. Please try again.'), 'error');
+    }
+}
+
+function showAssessmentResults(results) {
+    // Disable anti-cheat protections after finishing
+    disableAssessmentAntiCheat();
+
+    // Hide timer
+    const timerEl = document.getElementById('assessment-timer');
+    if (timerEl) timerEl.classList.add('hidden');
+
+    // Hide questions, show results
+    const questionsEl = document.getElementById('assessment-questions');
+    const resultsEl = document.getElementById('assessment-results');
+    if (questionsEl) questionsEl.classList.add('hidden');
+    if (resultsEl) resultsEl.classList.remove('hidden');
+
+    // Check for language-specific configuration
+    const language = window.assessmentState.currentAssessment?.category?.toLowerCase();
+    // languageConfig may not be defined in all deployments; guard against ReferenceError
+    const langConfig = (typeof languageConfig !== 'undefined' && language) ? (languageConfig[language] || null) : null;
+
+    // Apply language-specific styling if available
+    const resultsDiv = document.getElementById('assessment-results');
+    if (resultsDiv && langConfig) {
+        resultsDiv.classList.add(`result-${language}`);
+    }
+
+    // Update results display with language-specific elements
+    const iconHtml = langConfig ? `<i class="${langConfig.icon}"></i>` : '<i class="fas fa-trophy"></i>';
+    const scoreColor = langConfig ? `text-${langConfig.color}-600` : 'text-[#56AE67]';
+    const message = langConfig ? langConfig.message : 'Assessment Complete!';
+
+    if (resultsDiv) {
+        const h2 = resultsDiv.querySelector('h2');
+        if (h2) {
+            h2.innerHTML = `
+                <div class="text-6xl ${langConfig ? `text-${langConfig.color}-500` : 'text-green-500'} mb-4">
+                    ${iconHtml}
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">${message}</h2>
+            `;
+        }
+    }
+
+    const overallScoreEl = document.getElementById('overall-score');
+    if (overallScoreEl) {
+        overallScoreEl.className = `text-4xl font-bold ${scoreColor} dark:${scoreColor} mb-2`;
+        overallScoreEl.textContent = (results.percentage || 0) + '%';
+    }
+
+    // Update category scores
+    const categoryScoresContainer = document.getElementById('category-scores');
+    const categoryScores = results.categoryScores || {};
+
+    if (categoryScoresContainer) {
+        categoryScoresContainer.innerHTML = Object.entries(categoryScores).map(([category, score]) => {
+        const barColor = score >= 80 ? 'bg-green-500' : score >= 60 ? 'bg-yellow-500' : 'bg-red-500';
+
+        return `
+            <div class="mb-3">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-sm font-medium">${capitalizeFirst(category)}</span>
+                    <span class="text-sm font-bold">${score}%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="${barColor} h-2 rounded-full transition-all duration-1000"
+                         style="width: ${score}%"></div>
+                </div>
+            </div>
+        `;
+        }).join('');
+    }
+
+    // Show retake button if score is 0%
+    if ((results.percentage || 0) === 0) {
+        const retakeContainer = document.getElementById('retake-container') || document.createElement('div');
+        retakeContainer.id = 'retake-container';
+        retakeContainer.className = 'mt-6 text-center';
+        retakeContainer.innerHTML = `
+            <button onclick="startAssessment();" class="bg-[#56AE67] text-white px-5 py-3 rounded-lg hover:bg-[#3d8b4f]">
+                Retry Assessment
+            </button>`;
+        if (resultsDiv) resultsDiv.appendChild(retakeContainer);
+    }
+
+    // Update verified skills
+    const verifiedSkillsContainer = document.getElementById('verified-skills');
+    const verifiedSkills = Object.entries(categoryScores)
+        .filter(([category, score]) => score >= 60)
+        .map(([category, score]) => {
+            const level = score >= 80 ? 'Expert' : score >= 70 ? 'Advanced' : 'Intermediate';
+            return { category, level, score };
+        });
+
+    if (verifiedSkillsContainer) {
+        verifiedSkillsContainer.innerHTML = verifiedSkills.map(skill => `
+        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                <span class="font-medium">${capitalizeFirst(skill.category)}</span>
+            </div>
+            <span class="text-sm px-2 py-1 bg-green-100 text-green-800 rounded">
+                ${skill.level}
+            </span>
+        </div>
+    `).join('');
+    }
+
+    // Show congratulations or encouragement
+    const passed = results.passed;
+    if (passed) {
+        showToast(langConfig ? langConfig.message : 'Congratulations! You passed the assessment.', 'success');
+    } else {
+        showToast('Assessment complete. Keep learning to improve your skills!', 'info');
+    }
+    
+    // Add button to view detailed answers
+    const viewDetailsBtn = document.getElementById('view-details-btn');
+    if (viewDetailsBtn) {
+        viewDetailsBtn.onclick = () => showDetailedAnswers(results);
+    } else if (resultsDiv) {
+        // Create button if it doesn't exist
+        const btnContainer = document.createElement('div');
+        btnContainer.className = 'mt-6 text-center';
+        btnContainer.innerHTML = `
+            <button id="view-details-btn" 
+                style="background-color: #56AE67; color: white; border: 2px solid #2d6b3c;"
+                class="px-6 py-3 rounded-lg hover:bg-[#3d8b4f] dark:hover:bg-[#6bc481] transition font-medium shadow-md"
+                onmouseover="this.style.backgroundColor='#3d8b4f'" 
+                onmouseout="this.style.backgroundColor='#56AE67'">
+                <i class="fas fa-list-check mr-2"></i>View Detailed Answers
+            </button>
+        `;
+        resultsDiv.appendChild(btnContainer);
+        document.getElementById('view-details-btn').onclick = () => showDetailedAnswers(results);
+    }
+}
+
+function showDetailedAnswers(results) {
+    // Create modal to show detailed answers
+    const modal = document.createElement('div');
+    modal.id = 'detailed-answers-modal';
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+    
+    // Handle both fresh results and historical results from server
+    const questions = results.assessment?.questions || window.assessmentState?.currentAssessment?.questions || [];
+    const userSubmittedAnswers = results.answers || window.assessmentState?.userAnswers || [];
+    
+    if (questions.length === 0) {
+        console.error('No questions available to display');
+        showToast('Unable to load detailed answers', 'error');
+        return;
+    }
+    
+    let detailedHTML = `
+        <div class="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-[#56AE67] to-[#3d8b4f]">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-clipboard-check mr-2"></i>Detailed Answer Review
+                </h2>
+                <button onclick="document.getElementById('detailed-answers-modal').remove()" 
+                    class="text-white hover:text-gray-200 transition">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1" style="max-height: calc(90vh - 200px);">
+                <div class="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p class="text-sm text-blue-800 dark:text-blue-200">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Review your answers to identify areas for improvement. Green indicates correct answers, red indicates incorrect answers.
+                    </p>
+                </div>
+                
+                <div class="space-y-6">
+    `;
+    
+    questions.forEach((question, index) => {
+        const userAnswer = userSubmittedAnswers[index];
+        // Get correct answer from question object or from the enriched answer data
+        const correctAnswer = question.correctAnswer || userAnswer?.correctAnswer;
+        const userSelectedAnswer = userAnswer?.answer || userAnswer?.selectedAnswer || userAnswer?.userAnswer || null;
+        const isCorrect = userAnswer?.isCorrect || (userSelectedAnswer === correctAnswer);
+        
+        detailedHTML += `
+            <div class="border-2 ${isCorrect ? 'border-green-400 dark:border-green-600' : 'border-red-400 dark:border-red-600'} 
+                rounded-lg p-5 ${isCorrect ? 'bg-green-50 dark:bg-green-900/10' : 'bg-red-50 dark:bg-red-900/10'} shadow-md">
+                
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-900 dark:text-white text-lg mb-1">
+                            Question ${index + 1}
+                        </h3>
+                        <span class="inline-block px-2 py-1 text-xs font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            ${question.category || 'General'}
+                        </span>
+                    </div>
+                    <span class="${isCorrect ? 'bg-green-500 text-white' : 'bg-red-500 text-white'} 
+                        px-4 py-2 rounded-full text-sm font-bold shadow-md">
+                        ${isCorrect ? '<i class="fas fa-check mr-1"></i>Correct' : '<i class="fas fa-times mr-1"></i>Incorrect'}
+                    </span>
+                </div>
+                
+                <p class="text-gray-800 dark:text-gray-200 mb-4 font-medium text-base leading-relaxed">${question.question || userAnswer?.question || 'Question text unavailable'}</p>
+                
+                <div class="space-y-2">
+        `;
+        
+        // Show all options if available
+        if (question.options && question.options.length > 0) {
+            question.options.forEach(option => {
+                const isUserAnswer = option === userSelectedAnswer;
+                const isCorrectOption = option === correctAnswer;
+                
+                let optionClass = 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600';
+                let icon = '';
+                let badge = '';
+                
+                if (isCorrectOption) {
+                    optionClass = 'bg-green-100 dark:bg-green-900/30 text-green-900 dark:text-green-100 font-semibold border-2 border-green-500';
+                    icon = '<i class="fas fa-check-circle text-green-600 dark:text-green-400 mr-2"></i>';
+                    badge = '<span class="ml-auto text-xs font-bold text-green-700 dark:text-green-300">✓ CORRECT ANSWER</span>';
+                } else if (isUserAnswer && !isCorrect) {
+                    optionClass = 'bg-red-100 dark:bg-red-900/30 text-red-900 dark:text-red-100 font-semibold border-2 border-red-500';
+                    icon = '<i class="fas fa-times-circle text-red-600 dark:text-red-400 mr-2"></i>';
+                    badge = '<span class="ml-auto text-xs font-bold text-red-700 dark:text-red-300">✗ YOUR ANSWER</span>';
+                }
+                
+                detailedHTML += `
+                    <div class="${optionClass} px-4 py-3 rounded-lg flex items-center transition-all">
+                        ${icon}
+                        <span class="flex-1">${option}</span>
+                        ${badge}
+                    </div>
+                `;
+            });
+        }
+        
+        // Show "No answer provided" if user didn't answer
+        if (!userSelectedAnswer) {
+            detailedHTML += `
+                <div class="bg-gray-200 dark:bg-gray-700 px-4 py-3 rounded-lg flex items-center border-2 border-gray-400 dark:border-gray-600">
+                    <i class="fas fa-question-circle text-gray-500 dark:text-gray-400 mr-2"></i>
+                    <span class="flex-1 text-gray-600 dark:text-gray-400 font-medium">No answer provided</span>
+                </div>
+            `;
+        }
+        
+        // If no options available but we have answers, show them separately
+        if (!question.options || question.options.length === 0) {
+            if (userSelectedAnswer) {
+                detailedHTML += `
+                    <div class="bg-blue-100 dark:bg-blue-900/30 px-4 py-3 rounded-lg border border-blue-300">
+                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">YOUR ANSWER:</p>
+                        <p class="text-gray-900 dark:text-white">${userSelectedAnswer}</p>
+                    </div>
+                `;
+            }
+            if (correctAnswer && correctAnswer !== 'N/A') {
+                detailedHTML += `
+                    <div class="bg-green-100 dark:bg-green-900/30 px-4 py-3 rounded-lg border-2 border-green-500">
+                        <p class="text-xs font-semibold text-green-700 dark:text-green-300 mb-1">✓ CORRECT ANSWER:</p>
+                        <p class="text-green-900 dark:text-green-100 font-semibold">${correctAnswer}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        detailedHTML += `
+                </div>
+                
+                <div class="mt-4 pt-3 border-t border-gray-300 dark:border-gray-600">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="${isCorrect ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'} font-semibold">
+                            <i class="fas fa-star mr-1"></i>Points: ${isCorrect ? (question.points || 1) : 0} / ${question.points || 1}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    detailedHTML += `
+                </div>
+            </div>
+            
+            <div class="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                <div class="flex justify-between items-center">
+                    <div class="text-base text-gray-800 dark:text-gray-200 font-semibold">
+                        <i class="fas fa-chart-bar mr-2 text-[#56AE67]"></i>
+                        <strong>Overall Score:</strong> ${results.score || 0} / ${questions.reduce((sum, q) => sum + (q.points || 1), 0)} points
+                        <span class="ml-3 text-lg font-bold text-[#56AE67] dark:text-[#6bc481]">(${results.percentage}%)</span>
+                    </div>
+                    <button onclick="document.getElementById('detailed-answers-modal').remove()" 
+                        style="background-color: #56AE67; color: white;"
+                        class="px-6 py-2 rounded-lg hover:bg-[#3d8b4f] transition font-semibold shadow-md"
+                        onmouseover="this.style.backgroundColor='#3d8b4f'" 
+                        onmouseout="this.style.backgroundColor='#56AE67'">
+                        <i class="fas fa-times mr-2"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modal.innerHTML = detailedHTML;
+    document.body.appendChild(modal);
+    
+    // Close on background click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Close on ESC key
+    const handleEsc = (e) => {
+        if (e.key === 'Escape') {
+            modal.remove();
+            document.removeEventListener('keydown', handleEsc);
+        }
+    };
+    document.addEventListener('keydown', handleEsc);
+}
+
+function continueToPlatform() {
+    // Reset assessment state
+    window.assessmentState.currentAssessment = null;
+    window.assessmentState.currentQuestionIndex = 0;
+    window.assessmentState.userAnswers = [];
+    window.assessmentState.assessmentStartTime = null;
+    
+    // Clear sessionStorage
+    sessionStorage.removeItem('assessmentState');
+    
+    const timerEl2 = document.getElementById('assessment-timer');
+    if (timerEl2) timerEl2.classList.add('hidden');
+    
+    // Show dashboard
+    showDashboard();
+    showToast('Welcome to the IT OJT Platform!', 'success');
+
+    currentPage = null;
+}
+
+// Keyboard navigation for assessment
+document.addEventListener('keydown', function(event) {
+    if (currentPage === 'assessment-page' && !document.getElementById('assessment-questions').classList.contains('hidden')) {
+        switch(event.key) {
+            case 'ArrowLeft':
+                if (window.assessmentState.currentQuestionIndex > 0) {
+                    previousQuestion();
+                }
+                break;
+            case 'ArrowRight':
+                if (window.assessmentState.currentQuestionIndex < window.assessmentState.currentAssessment.questions.length - 1) {
+                    nextQuestion();
+                } else if (window.assessmentState.currentQuestionIndex === window.assessmentState.currentAssessment.questions.length - 1) {
+                    submitAssessment();
+                }
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+                // Quick select for multiple choice
+                const optionIndex = parseInt(event.key) - 1;
+                const optionInput = document.getElementById(`option-${optionIndex}`);
+                if (optionInput) {
+                    optionInput.checked = true;
+                }
+                break;
+        }
+    }
+});
+
+// Prevent page refresh during assessment
+window.addEventListener('beforeunload', function(event) {
+    if (currentPage === 'assessment-page' && window.assessmentState.currentAssessment) {
+        event.preventDefault();
+        event.returnValue = 'You have an assessment in progress. Are you sure you want to leave?';
+        return event.returnValue;
+    }
+});
+
+// Expose functions globally to ensure they're accessible from HTML onclick handlers
+window.startAssessment = startAssessment;
+window.nextQuestion = nextQuestion;
+window.previousQuestion = previousQuestion;
+window.submitAssessment = submitAssessment;
+window.continueToPlatform = continueToPlatform;
+
+// Show visual confirmation that functions are loaded
+setTimeout(() => {
+    if (typeof window.nextQuestion === 'function') {
+        console.log('✓ Assessment navigation functions loaded successfully');
+    }
+}, 100);
