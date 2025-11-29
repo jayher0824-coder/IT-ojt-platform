@@ -3,7 +3,23 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+
+// Load .env file if it exists (for local development)
+const envPath = path.join(__dirname, '..', '.env');
+const fs = require('fs');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config({ path: envPath });
+}
+
+// Validate required environment variables for production
+if (process.env.NODE_ENV === 'production') {
+  const required = ['MONGODB_URI', 'JWT_SECRET', 'SESSION_SECRET'];
+  const missing = required.filter(v => !process.env[v]);
+  if (missing.length > 0) {
+    console.error(`❌ FATAL: Missing required environment variables: ${missing.join(', ')}`);
+    process.exit(1);
+  }
+}
 
 const app = express();
 
