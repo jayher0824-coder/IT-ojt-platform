@@ -3,15 +3,17 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../../database/models/User');
 
 module.exports = function (passportInstance = passport) {
-  passportInstance.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'http://localhost:3000/api/auth/google/callback',
-        // Force account selection every time
-        prompt: 'select_account',
-      },
+  // Only configure Google OAuth if credentials are provided
+  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    passportInstance.use(
+      new GoogleStrategy(
+        {
+          clientID: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback',
+          // Force account selection every time
+          prompt: 'select_account',
+        },
       async (accessToken, refreshToken, profile, done) => {
         try {
           const email = profile.emails && profile.emails[0] && profile.emails[0].value;
@@ -45,6 +47,7 @@ module.exports = function (passportInstance = passport) {
       }
     )
   );
+  }
 
   // Serialize / deserialize not needed for JWT flow, but kept for completeness
   passportInstance.serializeUser((user, done) => {
