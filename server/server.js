@@ -12,13 +12,19 @@ if (fs.existsSync(envPath)) {
 }
 
 // Validate required environment variables for production
-if (process.env.NODE_ENV === 'production') {
-  const required = ['MONGODB_URI', 'JWT_SECRET', 'SESSION_SECRET'];
-  const missing = required.filter(v => !process.env[v]);
-  if (missing.length > 0) {
-    console.error(`❌ FATAL: Missing required environment variables: ${missing.join(', ')}`);
-    process.exit(1);
-  }
+const requiredVars = ['MONGODB_URI', 'JWT_SECRET', 'SESSION_SECRET'];
+const missingVars = requiredVars.filter(v => !process.env[v]);
+
+if (missingVars.length > 0) {
+  console.error('\n' + '='.repeat(60));
+  console.error('❌ FATAL: Missing required environment variables:');
+  missingVars.forEach(v => console.error(`   - ${v}`));
+  console.error('='.repeat(60));
+  console.error('\n📝 Please set these variables in your environment:\n');
+  console.error('  For Render: Go to Dashboard → Environment → Add Variable');
+  console.error('  For Local: Create a .env file with these values');
+  console.error('\n');
+  process.exit(1);
 }
 
 const app = express();
