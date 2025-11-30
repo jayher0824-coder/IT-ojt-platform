@@ -1069,7 +1069,7 @@ document.addEventListener('submit', async (e) => {
         
         console.log('Debug: Resume upload headers - Authorization: Bearer ' + authToken.substring(0, 20) + '...');
         
-        const resumeResponse = await fetch('/api/students/upload-resume', {
+        const resumeResponse = await fetch(API_BASE + '/students/upload-resume', {
           method: 'POST',
           headers: { 
             'Authorization': `Bearer ${authToken}` 
@@ -1101,7 +1101,7 @@ document.addEventListener('submit', async (e) => {
         
         console.log('Debug: Avatar upload headers - Authorization: Bearer ' + authToken.substring(0, 20) + '...');
         
-        const avatarResponse = await fetch('/api/students/upload-avatar', {
+        const avatarResponse = await fetch(API_BASE + '/students/upload-avatar', {
           method: 'POST',
           headers: { 
             'Authorization': `Bearer ${authToken}` 
