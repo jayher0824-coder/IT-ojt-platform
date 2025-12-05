@@ -1715,21 +1715,6 @@ function viewJob(jobId) {
                                             </span>
                                         ` : ''}
                                     </div>
-                                    <div class="flex space-x-3">
-                                        ${hasApplied ? `
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200">
-                                                <i class="fas fa-check mr-1"></i>Applied
-                                            </span>
-                                        ` : `
-                                            <button onclick="applyForJob('${job._id}')" 
-                                                style="background-color: #56AE67; color: white; border: 2px solid #2d6b3c;"
-                                                class="bg-[#56AE67] text-white px-6 py-2 rounded-lg hover:bg-[#3d8b4f] transition font-semibold border-2 border-green-800 dark:border-green-600"
-                                                onmouseover="this.style.backgroundColor='#3d8b4f'" 
-                                                onmouseout="this.style.backgroundColor='#56AE67'">
-                                                <i class="fas fa-paper-plane mr-2"></i>Apply Now
-                                            </button>
-                                        `}
-                                    </div>
                                 </div>
                             </div>
 

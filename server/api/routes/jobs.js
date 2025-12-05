@@ -70,6 +70,7 @@ router.get('/', async (req, res) => {
 
     const jobs = await Job.find(query)
       .populate('company', 'companyName logo industry verified')
+      .populate('customAssessment')
       .sort(sortOptions)
       .skip(skip)
       .limit(parseInt(limit));
@@ -183,7 +184,9 @@ router.get('/company/me', protect, authorize('company'), async (req, res) => {
 // @access  Public
 router.get('/:id', async (req, res) => {
   try {
-    const job = await Job.findById(req.params.id).populate('company');
+    const job = await Job.findById(req.params.id)
+      .populate('company')
+      .populate('customAssessment');
 
     if (!job) {
       return res.status(404).json({
