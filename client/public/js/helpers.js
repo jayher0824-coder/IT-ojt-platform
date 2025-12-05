@@ -51,7 +51,13 @@ async function apiCall(endpoint, options = {}) {
             delete config.headers['Content-Type'];
         }
 
-        const response = await fetch(API_BASE + endpoint, config);
+        const API_BASE = window.API_BASE || '/api';
+        const fullUrl = API_BASE + endpoint;
+        console.log('API Request:', { url: fullUrl, method: config.method || 'GET', hasBody: !!config.body });
+        
+        const response = await fetch(fullUrl, config);
+
+        console.log('API Response:', { status: response.status, statusText: response.statusText, ok: response.ok });
 
         // Try to parse JSON safely
         let text = null;
@@ -68,11 +74,23 @@ async function apiCall(endpoint, options = {}) {
             } catch (e) {
                 // non-JSON response
                 data = null;
+                
             }
         }
 
         if (!response.ok) {
-            const message = (data && data.message) || response.statusText || 'API call failed';
+            // Handle validation errors array from express-validator
+            let message = 'API call failed';
+            if (data && data.errors && Array.isArray(data.errors)) {
+                message = data.errors.map(err => err.msg || err.message).join('; ');
+                console.error('Validation errors:', data.errors);
+            } else if (data && data.message) {
+                message = data.message;
+                console.error('API error message:', data.message);
+            } else {
+                message = response.statusText || 'API call failed';
+            }
+            console.error('Full error response:', data);
             const err = new Error(message);
             err.status = response.status;
             err.response = data;

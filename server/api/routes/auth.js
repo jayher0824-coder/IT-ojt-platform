@@ -85,11 +85,15 @@ router.post('/register', [
   }),
 ], async (req, res) => {
   try {
+    console.log('Registration attempt:', { email: req.body.email, role: req.body.role });
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.error('Validation errors:', errors.array());
       return res.status(400).json({
         success: false,
         errors: errors.array(),
+        message: errors.array().map(e => e.msg).join('; ')
       });
     }
 
@@ -167,10 +171,11 @@ router.post('/register', [
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error('Registration error:', error.message);
+    console.error('Stack:', error.stack);
     res.status(500).json({
       success: false,
-      message: 'Server error',
+      message: 'Server error: ' + error.message,
     });
   }
 });
