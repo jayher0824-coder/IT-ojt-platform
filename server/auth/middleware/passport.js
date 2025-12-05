@@ -5,7 +5,14 @@ const Student = require('../../database/models/Student');
 
 module.exports = function (passportInstance = passport) {
   // Only configure Google OAuth if credentials are provided
+  console.log('Passport config - Google OAuth:', {
+    hasClientID: !!process.env.GOOGLE_CLIENT_ID,
+    hasClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL
+  });
+  
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    console.log('Configuring Google OAuth strategy...');
     passportInstance.use(
       new GoogleStrategy(
         {
