@@ -1776,7 +1776,15 @@ function viewJob(jobId) {
                                                     ${job.customAssessment.timeLimit ? `<span><i class="fas fa-clock mr-1"></i>${job.customAssessment.timeLimit} minutes</span>` : ''}
                                                     ${job.customAssessment.passingScore ? `<span><i class="fas fa-chart-line mr-1"></i>Pass: ${job.customAssessment.passingScore}%</span>` : ''}
                                                 </div>
-                                                <button onclick="takeCustomAssessment('${job._id}')" 
+                                                <button onclick="takeCustomAssessment('${job._id}', function(result) { 
+                                                    if (result && result.success) { 
+                                                        closeModal(); 
+                                                        setTimeout(function() { 
+                                                            showToast('Assessment completed! You can now apply for this job.', 'success'); 
+                                                            viewJob('${job._id}'); 
+                                                        }, 500); 
+                                                    } 
+                                                })" 
                                                     style="background-color: #2563eb; color: white; border: 2px solid #1e40af;"
                                                     class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold border-2"
                                                     onmouseover="this.style.backgroundColor='#1d4ed8'" 

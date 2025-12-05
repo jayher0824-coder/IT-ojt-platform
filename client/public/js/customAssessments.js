@@ -358,15 +358,24 @@ function showCustomAssessmentModal(assessment, jobId, onComplete) {
                         </div>
                         <div class="flex space-x-3">
                             <button id="custom-prev-btn" onclick="navigateCustomQuestion(-1)" 
-                                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition" disabled>
+                                style="background-color: #4B5563; color: white;"
+                                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                                onmouseover="this.style.backgroundColor='#374151'" 
+                                onmouseout="this.style.backgroundColor='#4B5563'" disabled>
                                 <i class="fas fa-arrow-left mr-2"></i>Previous
                             </button>
                             <button id="custom-next-btn" onclick="navigateCustomQuestion(1)" 
-                                class="px-4 py-2 bg-[#56AE67] text-white rounded-lg hover:bg-[#3d8b4f] transition font-bold">
+                                style="background-color: #56AE67; color: white; border: 2px solid #2d6b3c;"
+                                class="px-4 py-2 bg-[#56AE67] text-white rounded-lg hover:bg-[#3d8b4f] transition font-bold border-2"
+                                onmouseover="this.style.backgroundColor='#3d8b4f'" 
+                                onmouseout="this.style.backgroundColor='#56AE67'">
                                 Next<i class="fas fa-arrow-right ml-2"></i>
                             </button>
-                            <button id="custom-submit-btn" style="display:none;" onclick="submitCustomAssessment()" 
-                                class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-bold">
+                            <button id="custom-submit-btn" style="display:none; background-color: #16a34a; color: white;" 
+                                onclick="submitCustomAssessment()" 
+                                class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-bold"
+                                onmouseover="this.style.backgroundColor='#15803d'" 
+                                onmouseout="this.style.backgroundColor='#16a34a'">
                                 <i class="fas fa-check mr-2"></i>Submit Assessment
                             </button>
                         </div>
