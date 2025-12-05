@@ -117,107 +117,107 @@ async function loadStudentDashboard() {
         const validApplications = applications.filter(app => app && app.job && app.job.title);
 
         dashboardContainer.innerHTML = `
-            <div class="flex h-screen bg-gray-50 dark:bg-gray-900">
+            <div class="flex flex-col md:flex-row h-screen bg-gray-50 dark:bg-gray-900">
                 <!-- Sidebar -->
-                <div class="w-64 bg-white dark:bg-gray-800 shadow-lg">
-                    <div class="p-6">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Student Portal</h2>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">Your OJT Journey</p>
+                <div class="w-full md:w-64 bg-white dark:bg-gray-800 shadow-lg md:h-screen overflow-y-auto">
+                    <div class="p-4 md:p-6">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Student Portal</h2>
+                        <p class="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-1">Your OJT Journey</p>
                     </div>
 
                     <!-- Navigation -->
-                    <nav class="px-4 pb-4">
-                        <div class="space-y-2">
-                            <button id="nav-assessment" onclick="switchToSection('assessment')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center">
-                                <i class="fas fa-brain mr-3"></i>Skills Assessment
+                    <nav class="px-2 md:px-4 pb-4">
+                        <div class="space-y-1 md:space-y-2">
+                            <button id="nav-assessment" onclick="switchToSection('assessment')" class="nav-item w-full text-left px-3 md:px-4 py-2 md:py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center text-sm md:text-base">
+                                <i class="fas fa-brain mr-2 md:mr-3"></i><span class="truncate">Skills Assessment</span>
                             </button>
-                            <button id="nav-history" onclick="switchToSection('history')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center">
-                                <i class="fas fa-history mr-3"></i>Assessment History
+                            <button id="nav-history" onclick="switchToSection('history')" class="nav-item w-full text-left px-3 md:px-4 py-2 md:py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center text-sm md:text-base">
+                                <i class="fas fa-history mr-2 md:mr-3"></i><span class="truncate">Assessment History</span>
                             </button>
-                            <button id="nav-profile" onclick="switchToSection('profile')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center">
-                                <i class="fas fa-user mr-3"></i>Profile
+                            <button id="nav-profile" onclick="switchToSection('profile')" class="nav-item w-full text-left px-3 md:px-4 py-2 md:py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center text-sm md:text-base">
+                                <i class="fas fa-user mr-2 md:mr-3"></i><span class="truncate">Profile</span>
                             </button>
-                            <button id="nav-applications" onclick="switchToSection('applications')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center">
-                                <i class="fas fa-paper-plane mr-3"></i>Applications
+                            <button id="nav-applications" onclick="switchToSection('applications')" class="nav-item w-full text-left px-3 md:px-4 py-2 md:py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center text-sm md:text-base">
+                                <i class="fas fa-paper-plane mr-2 md:mr-3"></i><span class="truncate">Applications</span>
                             </button>
                         </div>
                     </nav>
 
                     <!-- User Actions - Empty for now -->
-                    <div class="px-4 pb-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <div class="px-2 md:px-4 pb-4 border-t border-gray-200 dark:border-gray-700 pt-4">
                     </div>
                 </div>
 
                 <!-- Main Content -->
                 <div class="flex-1 overflow-auto">
                     <!-- Dashboard Section -->
-                    <div id="dashboard-section" class="section p-8">
+                    <div id="dashboard-section" class="section p-4 md:p-8">
                         <!-- Dashboard Header -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 md:p-6 mb-4 md:mb-8">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
-                                    <p class="text-gray-600 dark:text-gray-300 mt-2">Welcome back! Here's your OJT journey overview.</p>
+                                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h2>
+                                    <p class="text-gray-600 dark:text-gray-300 mt-1 md:mt-2 text-sm md:text-base">Welcome back! Here's your OJT journey overview.</p>
                                 </div>
                             </div>
                         </div>
 
                 <!-- Stats Cards -->
-                <div class="grid md:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full">
-                                <i class="fas fa-briefcase text-blue-600 dark:text-blue-400 text-xl"></i>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-8">
+                    <div class="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow">
+                        <div class="flex flex-col md:flex-row items-start md:items-center">
+                            <div class="p-2 md:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-2 md:mb-0">
+                                <i class="fas fa-briefcase text-blue-600 dark:text-blue-400 text-base md:text-xl"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">${validJobs.length}</p>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm">Available Jobs</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
-                                <i class="fas fa-paper-plane text-green-600 dark:text-green-400 text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">${validApplications.length}</p>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm">Applications</p>
+                            <div class="md:ml-4">
+                                <p class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">${validJobs.length}</p>
+                                <p class="text-gray-600 dark:text-gray-300 text-xs md:text-sm">Available Jobs</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-                                <i class="fas fa-chart-line text-purple-600 dark:text-purple-400 text-xl"></i>
+                    <div class="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow">
+                        <div class="flex flex-col md:flex-row items-start md:items-center">
+                            <div class="p-2 md:p-3 bg-green-100 dark:bg-green-900/30 rounded-full mb-2 md:mb-0">
+                                <i class="fas fa-paper-plane text-green-600 dark:text-green-400 text-base md:text-xl"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">${studentProfile?.assessmentScore?.overall || 0}%</p>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm">Assessment Score</p>
+                            <div class="md:ml-4">
+                                <p class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">${validApplications.length}</p>
+                                <p class="text-gray-600 dark:text-gray-300 text-xs md:text-sm">Applications</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                        <div class="flex items-center">
-                            <div class="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-full">
-                                <i class="fas fa-skills text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                    <div class="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow">
+                        <div class="flex flex-col md:flex-row items-start md:items-center">
+                            <div class="p-2 md:p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full mb-2 md:mb-0">
+                                <i class="fas fa-chart-line text-purple-600 dark:text-purple-400 text-base md:text-xl"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-2xl font-bold text-gray-900 dark:text-white">${studentProfile?.skills?.length || 0}</p>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm">Verified Skills</p>
+                            <div class="md:ml-4">
+                                <p class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">${studentProfile?.assessmentScore?.overall || 0}%</p>
+                                <p class="text-gray-600 dark:text-gray-300 text-xs md:text-sm">Assessment Score</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow">
+                        <div class="flex flex-col md:flex-row items-start md:items-center">
+                            <div class="p-2 md:p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-full mb-2 md:mb-0">
+                                <i class="fas fa-skills text-yellow-600 dark:text-yellow-400 text-base md:text-xl"></i>
+                            </div>
+                            <div class="md:ml-4">
+                                <p class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">${studentProfile?.skills?.length || 0}</p>
+                                <p class="text-gray-600 dark:text-gray-300 text-xs md:text-sm">Verified Skills</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Main Content Grid -->
-                <div class="grid lg:grid-cols-3 gap-8">
+                <div class="grid lg:grid-cols-3 gap-4 md:gap-8">
                     <!-- Job Matches -->
                     <div class="lg:col-span-2">
                         <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-                            <div class="p-6 border-b border-gray-200 dark:border-gray-600">
-                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Recommended Jobs</h3>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">Jobs matched to your skills and preferences</p>
+                            <div class="p-4 md:p-6 border-b border-gray-200 dark:border-gray-600">
+                                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white">Recommended Jobs</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-xs md:text-sm mt-1">Jobs matched to your skills and preferences</p>
                             </div>
                             <div class="p-6">
                                 ${validJobs.length > 0 ?
