@@ -2300,36 +2300,57 @@ async function viewSubmissionDetails(submissionId) {
         detailModal.className = 'fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4';
         
         detailModal.innerHTML = `
-            <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-                <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-600">
+            <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+                <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">
                         Assessment Details - ${submission.student?.firstName} ${submission.student?.lastName}
                     </h2>
-                    <button onclick="closeSubmissionDetailsModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                        <i class="fas fa-times text-xl"></i>
+                    <button onclick="closeSubmissionDetailsModal()" 
+                        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
+                        <i class="fas fa-times text-2xl"></i>
                     </button>
                 </div>
                 
-                <div class="p-6 overflow-y-auto flex-1 scrollbar-custom">
+                <div class="p-6 overflow-y-auto flex-1" style="max-height: calc(90vh - 180px); scrollbar-width: thin; scrollbar-color: #56AE67 #e5e7eb;">
+                    <style>
+                        .submission-details-scroll::-webkit-scrollbar {
+                            width: 8px;
+                        }
+                        .submission-details-scroll::-webkit-scrollbar-track {
+                            background: #e5e7eb;
+                            border-radius: 4px;
+                        }
+                        .dark .submission-details-scroll::-webkit-scrollbar-track {
+                            background: #374151;
+                        }
+                        .submission-details-scroll::-webkit-scrollbar-thumb {
+                            background: #56AE67;
+                            border-radius: 4px;
+                        }
+                        .submission-details-scroll::-webkit-scrollbar-thumb:hover {
+                            background: #3d8b4f;
+                        }
+                    </style>
+                    <div class="submission-details-scroll">
                     <div class="mb-6 grid md:grid-cols-3 gap-4">
-                        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Final Score</p>
+                        <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Final Score</p>
                             <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${submission.score}%</p>
                         </div>
-                        <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Correct Answers</p>
+                        <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg border border-green-100 dark:border-green-800">
+                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Correct Answers</p>
                             <p class="text-3xl font-bold text-green-600 dark:text-green-400">${submission.answers?.filter(a => a.isCorrect).length || 0}/${submission.answers?.length || 0}</p>
                         </div>
-                        <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Time Taken</p>
+                        <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
+                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Time Taken</p>
                             <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">${formatDuration(submission.timeTaken)}</p>
                         </div>
                     </div>
 
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Question Breakdown</h3>
                     ${!submission.answers || submission.answers.length === 0 ? `
-                        <div class="text-center py-8 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <i class="fas fa-info-circle text-gray-400 text-3xl mb-2"></i>
+                        <div class="text-center py-8 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <i class="fas fa-info-circle text-gray-400 dark:text-gray-500 text-3xl mb-2"></i>
                             <p class="text-gray-600 dark:text-gray-400">No detailed answer information available for this submission.</p>
                         </div>
                     ` : `
@@ -2361,34 +2382,34 @@ async function viewSubmissionDetails(submissionId) {
                                 }
                                 
                                 return `
-                                <div class="border ${answer.isCorrect ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/10' : 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/10'} rounded-lg p-5">
+                                <div class="border ${answer.isCorrect ? 'border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20' : 'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20'} rounded-lg p-5 mb-4">
                                     <div class="flex items-start gap-4">
-                                        <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${answer.isCorrect ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'}">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${answer.isCorrect ? 'bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200' : 'bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200'}">
                                             <i class="fas ${answer.isCorrect ? 'fa-check' : 'fa-times'} text-lg"></i>
                                         </div>
                                         <div class="flex-1">
                                             <div class="flex items-start justify-between mb-3">
                                                 <h4 class="font-semibold text-gray-900 dark:text-white text-base">Question ${index + 1}</h4>
-                                                <span class="text-xs px-3 py-1 rounded-full font-medium ${answer.isCorrect ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'}">
+                                                <span class="text-xs px-3 py-1 rounded-full font-medium ${answer.isCorrect ? 'bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200' : 'bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200'}">
                                                     ${answer.isCorrect ? 'Correct' : 'Incorrect'}
                                                 </span>
                                             </div>
-                                            <p class="text-gray-700 dark:text-gray-300 mb-4 text-sm leading-relaxed">${questionText}</p>
+                                            <p class="text-gray-700 dark:text-gray-200 mb-4 text-sm leading-relaxed">${questionText}</p>
                                             
-                                            <div class="space-y-3 bg-white dark:bg-gray-800 p-4 rounded-lg">
+                                            <div class="space-y-3 bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
                                                 <div class="flex items-start gap-2">
-                                                    <i class="fas fa-user-circle text-blue-500 mt-1"></i>
+                                                    <i class="fas fa-user-circle text-blue-500 dark:text-blue-400 mt-1"></i>
                                                     <div class="flex-1">
                                                         <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Student's Answer</p>
-                                                        <p class="text-gray-900 dark:text-white font-medium">${displayStudentAnswer}</p>
+                                                        <p class="text-gray-900 dark:text-gray-100 font-medium">${displayStudentAnswer}</p>
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="border-t border-gray-200 dark:border-gray-700 pt-3 flex items-start gap-2">
-                                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                                <div class="border-t border-gray-200 dark:border-gray-600 pt-3 flex items-start gap-2">
+                                                    <i class="fas fa-check-circle text-green-500 dark:text-green-400 mt-1"></i>
                                                     <div class="flex-1">
                                                         <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Correct Answer</p>
-                                                        <p class="text-green-700 dark:text-green-400 font-medium">${displayCorrectAnswer}</p>
+                                                        <p class="text-green-700 dark:text-green-300 font-medium">${displayCorrectAnswer}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2398,9 +2419,28 @@ async function viewSubmissionDetails(submissionId) {
                             `}).join('')}
                         </div>
                     `}
+                    </div>
+                </div>
+                
+                <!-- Footer with Close Button -->
+                <div class="p-4 border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 flex justify-end">
+                    <button onclick="closeSubmissionDetailsModal()" 
+                        style="background-color: #4B5563; color: white;"
+                        class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition font-medium"
+                        onmouseover="this.style.backgroundColor='#374151'" 
+                        onmouseout="this.style.backgroundColor='#4B5563'">
+                        <i class="fas fa-times mr-2"></i>Close
+                    </button>
                 </div>
             </div>
         `;
+        
+        // Add click outside to close
+        detailModal.addEventListener('click', function(e) {
+            if (e.target === detailModal) {
+                closeSubmissionDetailsModal();
+            }
+        });
         
         document.body.appendChild(detailModal);
         
