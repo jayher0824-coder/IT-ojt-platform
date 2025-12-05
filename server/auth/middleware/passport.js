@@ -1,6 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../../database/models/User');
+const Student = require('../../database/models/Student');
 
 module.exports = function (passportInstance = passport) {
   // Only configure Google OAuth if credentials are provided
@@ -38,10 +39,31 @@ module.exports = function (passportInstance = passport) {
                 role: 'student',
                 googleId: profile.id,
               });
+              
+              // Create a basic Student profile for Google OAuth users
+              await Student.create({
+                user: user._id,
+                studentId: `GOOGLE-${profile.id.slice(0, 10)}`, // Temporary ID
+                firstName: profile.name?.givenName || 'Student',
+                lastName: profile.name?.familyName || 'User',
+                dateOfBirth: new Date('2000-01-01'), // Placeholder
+                phone: '0000000000', // Placeholder - will be updated later
+                address: {
+                  street: 'To be updated',
+                  city: 'To be updated',
+                  state: 'To be updated',
+                  zipCode: '0000',
+                  country: 'Philippines',
+                },
+                assessmentCompleted: false,
+                assessmentScore: null,
+                skills: [],
+              });
             }
           }
           return done(null, user);
         } catch (err) {
+          console.error('Google OAuth error:', err);
           return done(err, null);
         }
       }
