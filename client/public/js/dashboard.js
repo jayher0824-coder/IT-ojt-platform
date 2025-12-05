@@ -1771,11 +1771,18 @@ function viewJob(jobId) {
                                             <div class="flex-1">
                                                 <p class="font-semibold text-gray-900 dark:text-white mb-2">${job.customAssessment.title}</p>
                                                 <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">${job.customAssessment.description}</p>
-                                                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
                                                     <span><i class="fas fa-question-circle mr-1"></i>${job.customAssessment.questions?.length || 0} questions</span>
                                                     ${job.customAssessment.timeLimit ? `<span><i class="fas fa-clock mr-1"></i>${job.customAssessment.timeLimit} minutes</span>` : ''}
                                                     ${job.customAssessment.passingScore ? `<span><i class="fas fa-chart-line mr-1"></i>Pass: ${job.customAssessment.passingScore}%</span>` : ''}
                                                 </div>
+                                                <button onclick="takeCustomAssessment('${job._id}')" 
+                                                    style="background-color: #2563eb; color: white; border: 2px solid #1e40af;"
+                                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold border-2"
+                                                    onmouseover="this.style.backgroundColor='#1d4ed8'" 
+                                                    onmouseout="this.style.backgroundColor='#2563eb'">
+                                                    <i class="fas fa-play-circle mr-2"></i>Take Assessment
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
