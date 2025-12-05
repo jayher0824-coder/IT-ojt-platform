@@ -4210,6 +4210,19 @@ function toggleSettingsDropdown() {
 
 // Start category-specific assessment
 function startCategoryAssessment(category) {
+    console.log('Starting assessment for category:', category);
+    
+    // Show loading feedback
+    const categoryNames = {
+        'programming': 'Programming',
+        'database': 'Database',
+        'webDevelopment': 'Web Development',
+        'networking': 'Networking',
+        'problemSolving': 'Problem Solving'
+    };
+    
+    showToast(`Loading ${categoryNames[category]} assessment...`, 'info');
+    
     if (typeof startAssessment === 'function') {
         startAssessment(category);
     } else {
