@@ -1776,6 +1776,27 @@ function viewJob(jobId) {
                                 </div>
                             ` : ''}
 
+                            <!-- Assessment Requirement -->
+                            ${job.requireCustomAssessment && job.customAssessment ? `
+                                <div class="mb-6">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Assessment Required</h3>
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                                        <div class="flex items-start">
+                                            <i class="fas fa-clipboard-list text-yellow-600 dark:text-yellow-400 text-xl mr-3 mt-1"></i>
+                                            <div class="flex-1">
+                                                <p class="font-semibold text-gray-900 dark:text-white mb-2">${job.customAssessment.title}</p>
+                                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">${job.customAssessment.description}</p>
+                                                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                                    <span><i class="fas fa-question-circle mr-1"></i>${job.customAssessment.questions?.length || 0} questions</span>
+                                                    ${job.customAssessment.timeLimit ? `<span><i class="fas fa-clock mr-1"></i>${job.customAssessment.timeLimit} minutes</span>` : ''}
+                                                    ${job.customAssessment.passingScore ? `<span><i class="fas fa-chart-line mr-1"></i>Pass: ${job.customAssessment.passingScore}%</span>` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : ''}
+
                             <!-- Company Info -->
                             <div class="mb-6">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">About ${job.company.companyName}</h3>
@@ -1905,17 +1926,6 @@ function viewJob(jobId) {
                                             <div class="text-sm text-gray-500 dark:text-gray-400">per month</div>
                                         ` : ''}
                                     </div>
-                                </div>
-
-                                <!-- Apply Button -->
-                                <div class="flex justify-end mb-4">
-                                    <button onclick="applyForJob('${job._id}')" 
-                                        style="background-color: #56AE67; color: white; border: 2px solid #2d6b3c;"
-                                        class="bg-[#56AE67] text-white px-6 py-2 rounded-lg hover:bg-[#3d8b4f] transition font-semibold border-2 border-green-800 dark:border-green-600"
-                                        onmouseover="this.style.backgroundColor='#3d8b4f'" 
-                                        onmouseout="this.style.backgroundColor='#56AE67'">
-                                        <i class="fas fa-paper-plane mr-2"></i>Apply Now
-                                    </button>
                                 </div>
                             </div>
 
