@@ -47,7 +47,7 @@ module.exports = function (passportInstance = passport) {
                 firstName: profile.name?.givenName || 'Student',
                 lastName: profile.name?.familyName || 'User',
                 dateOfBirth: new Date('2000-01-01'), // Placeholder
-                phone: '0000000000', // Placeholder - will be updated later
+                phone: '09000000000', // Valid 11-digit placeholder - will be updated later
                 address: {
                   street: 'To be updated',
                   city: 'To be updated',
