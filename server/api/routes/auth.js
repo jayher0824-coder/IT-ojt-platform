@@ -314,11 +314,30 @@ router.get('/google', passport.authenticate('google', {
   prompt: 'select_account'  // Force account selection every time
 }));
 
-router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/' }), (req, res) => {
-  const token = generateToken(req.user._id);
-  // Redirect to front-end with token and basic user info as query params
-  const redirectUrl = `/auth-success.html?token=${token}&email=${encodeURIComponent(req.user.email)}&role=${req.user.role}`;
-  res.redirect(redirectUrl);
-});
+router.get('/google/callback', 
+  passport.authenticate('google', { session: false, failureRedirect: '/' }), 
+  (req, res, next) => {
+    try {
+      if (!req.user) {
+        console.error('Google OAuth: No user returned from passport');
+        return res.status(401).json({
+          success: false,
+          message: 'Authentication failed - no user'
+        });
+      }
+      
+      const token = generateToken(req.user._id);
+      // Redirect to front-end with token and basic user info as query params
+      const redirectUrl = `/auth-success.html?token=${token}&email=${encodeURIComponent(req.user.email)}&role=${req.user.role}`;
+      res.redirect(redirectUrl);
+    } catch (error) {
+      console.error('Google OAuth callback error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Authentication error: ' + error.message
+      });
+    }
+  }
+);
 
 module.exports = router;
