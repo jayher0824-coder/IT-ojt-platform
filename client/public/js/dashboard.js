@@ -833,15 +833,15 @@ function showStudentProfileModal() {
                     <div>
                         <h4 class="font-semibold mb-3">Personal Information</h4>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">First Name *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">First Name *</label>
                             <input type="text" id="firstName" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.firstName || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Last Name *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Last Name *</label>
                             <input type="text" id="lastName" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.lastName || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Date of Birth *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Date of Birth *</label>
                             <input type="date" id="dateOfBirth" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.dateOfBirth ? new Date(profile.dateOfBirth).toISOString().split('T')[0] : ''}">
                         </div>
                         <div class="mb-4">
@@ -861,19 +861,19 @@ function showStudentProfileModal() {
                     <div>
                         <h4 class="font-semibold mb-3">Address</h4>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Street</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Street</label>
                             <input type="text" id="street" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.street || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">City</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">City</label>
                             <input type="text" id="city" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.city || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">State</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">State</label>
                             <input type="text" id="state" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.state || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Country</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Country</label>
                             <input type="text" id="country" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.country || ''}">
                         </div>
                     </div>
@@ -884,19 +884,19 @@ function showStudentProfileModal() {
                     <h4 class="font-semibold mb-3">Education</h4>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">School/University</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">School/University</label>
                             <input type="text" id="school" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.education?.school || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Degree</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Degree</label>
                             <input type="text" id="degree" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.education?.degree || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Field of Study</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Field of Study</label>
                             <input type="text" id="fieldOfStudy" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.education?.fieldOfStudy || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Graduation Year</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Graduation Year</label>
                             <input type="number" id="graduationYear" min="2000" max="2030" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.education?.graduationYear || ''}">
                         </div>
                     </div>
@@ -907,15 +907,15 @@ function showStudentProfileModal() {
                     <h4 class="font-semibold mb-3">Portfolio & Links</h4>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">GitHub URL</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">GitHub URL</label>
                             <input type="url" id="githubUrl" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.portfolio?.githubUrl || ''}" placeholder="https://github.com/username">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">LinkedIn URL</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">LinkedIn URL</label>
                             <input type="url" id="linkedinUrl" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.portfolio?.linkedinUrl || ''}" placeholder="https://linkedin.com/in/username">
                         </div>
                         <div class="mb-4 md:col-span-2">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Personal Website</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Personal Website</label>
                             <input type="url" id="personalWebsite" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.portfolio?.personalWebsite || ''}" placeholder="https://yourwebsite.com">
                         </div>
                     </div>
@@ -926,7 +926,7 @@ function showStudentProfileModal() {
                     <h4 class="font-semibold mb-3">Job Preferences</h4>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Job Types</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Job Types</label>
                             <div class="space-y-2">
                                 <label class="flex items-center">
                                     <input type="checkbox" value="full-time" ${profile?.preferences?.jobTypes?.includes('full-time') ? 'checked' : ''} class="mr-2"> Full-time
@@ -943,7 +943,7 @@ function showStudentProfileModal() {
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Preferred Locations (comma-separated)</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Preferred Locations (comma-separated)</label>
                             <input type="text" id="locations" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.preferences?.locations?.join(', ') || ''}" placeholder="Manila, Quezon City, Makati">
                             <div class="mt-2">
                                 <label class="flex items-center">
@@ -1088,11 +1088,11 @@ function showCompanyProfile() {
                     <div>
                         <h4 class="font-semibold mb-3">Company Information</h4>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Company Name *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Company Name *</label>
                             <input type="text" id="companyName" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.companyName || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Industry *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Industry *</label>
                             <select id="industry" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]">
                                 <option value="">Select Industry</option>
                                 <option value="Technology" ${profile?.industry === 'Technology' ? 'selected' : ''}>Technology</option>
@@ -1105,7 +1105,7 @@ function showCompanyProfile() {
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Company Size *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Company Size *</label>
                             <select id="companySize" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]">
                                 <option value="">Select Size</option>
                                 <option value="1-10" ${profile?.companySize === '1-10' ? 'selected' : ''}>1-10 employees</option>
@@ -1116,7 +1116,7 @@ function showCompanyProfile() {
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Website</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Website</label>
                             <input type="url" id="website" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.website || ''}" placeholder="https://company.com">
                         </div>
                     </div>
@@ -1125,15 +1125,15 @@ function showCompanyProfile() {
                     <div>
                         <h4 class="font-semibold mb-3">Contact Person</h4>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">First Name</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">First Name</label>
                             <input type="text" id="contactFirstName" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.contactPerson?.firstName || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Last Name</label>
                             <input type="text" id="contactLastName" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.contactPerson?.lastName || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Title</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Title</label>
                             <input type="text" id="contactTitle" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.contactPerson?.title || ''}" placeholder="HR Manager">
                         </div>
                         <div class="mb-4">
@@ -1161,19 +1161,19 @@ function showCompanyProfile() {
                     <h4 class="font-semibold mb-3">Address</h4>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Street</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Street</label>
                             <input type="text" id="companyStreet" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.street || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">City</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">City</label>
                             <input type="text" id="companyCity" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.city || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">State</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">State</label>
                             <input type="text" id="companyState" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.state || ''}">
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Country</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Country</label>
                             <input type="text" id="companyCountry" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" value="${profile?.address?.country || ''}">
                         </div>
                     </div>
@@ -1287,11 +1287,11 @@ function showCreateJob() {
                 <div>
                     <h4 class="font-semibold mb-3">Job Information</h4>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Job Title *</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Job Title *</label>
                         <input type="text" id="jobTitle" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" placeholder="e.g. Junior Software Developer">
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Job Type *</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Job Type *</label>
                         <select id="jobType" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]">
                             <option value="">Select Job Type</option>
                             <option value="full-time">Full-time</option>
@@ -1302,7 +1302,7 @@ function showCreateJob() {
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Experience Level *</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Experience Level *</label>
                         <select id="experienceLevel" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]">
                             <option value="">Select Experience Level</option>
                             <option value="entry-level">Entry Level</option>
@@ -1312,7 +1312,7 @@ function showCreateJob() {
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Number of Positions</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Number of Positions</label>
                         <input type="number" id="numberOfPositions" min="1" value="1" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]">
                     </div>
                 </div>
@@ -1321,25 +1321,25 @@ function showCreateJob() {
                 <div>
                     <h4 class="font-semibold mb-3">Location & Compensation</h4>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">City</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">City</label>
                         <input type="text" id="jobCity" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" placeholder="e.g. Manila">
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">State/Province</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">State/Province</label>
                         <input type="text" id="jobState" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]" placeholder="e.g. Metro Manila">
                     </div>
                     <div class="mb-4">
                         <div class="flex items-center">
                             <input type="checkbox" id="remoteWork" class="mr-2">
-                            <label for="remoteWork" class="text-gray-700 text-sm">Remote Work Available</label>
+                            <label for="remoteWork" class="text-gray-700 dark:text-gray-300 text-sm">Remote Work Available</label>
                         </div>
                         <div class="flex items-center mt-2">
                             <input type="checkbox" id="hybridWork" class="mr-2">
-                            <label for="hybridWork" class="text-gray-700 text-sm">Hybrid Work Available</label>
+                            <label for="hybridWork" class="text-gray-700 dark:text-gray-300 text-sm">Hybrid Work Available</label>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Salary Range (Monthly)</label>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Salary Range (Monthly)</label>
                         <div class="grid grid-cols-2 gap-2">
                             <input type="number" id="salaryMin" placeholder="Min" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]">
                             <input type="number" id="salaryMax" placeholder="Max" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#56AE67]">

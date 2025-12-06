@@ -116,7 +116,7 @@ const Login = () => {
           )}
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Email
               </label>
               <input
@@ -131,7 +131,7 @@ const Login = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Password
               </label>
               <input
@@ -393,21 +393,21 @@ const RetakeRequests = () => {
 
       {/* Review Modal */}
       {selectedRequest && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-medium mb-4">Review Retake Request</h3>
-            <div className="mb-4">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-medium mb-4 dark:text-white">Review Retake Request</h3>
+            <div className="mb-4 dark:text-gray-300">
               <p><strong>Student:</strong> {selectedRequest.student.name}</p>
               <p><strong>Reason:</strong> {selectedRequest.reason}</p>
             </div>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Decision</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Decision</label>
                 <select
                   value={reviewData.status}
                   onChange={(e) => setReviewData({...reviewData, status: e.target.value})}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
                 >
                   <option value="">Select decision</option>
                   <option value="approved">Approve</option>
@@ -416,11 +416,11 @@ const RetakeRequests = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700">Admin Notes</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Admin Notes</label>
                 <textarea
                   value={reviewData.adminNotes}
                   onChange={(e) => setReviewData({...reviewData, adminNotes: e.target.value})}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
                   rows="3"
                 />
               </div>
@@ -429,7 +429,7 @@ const RetakeRequests = () => {
             <div className="flex justify-end space-x-3 mt-6">
               <button
                 onClick={() => setSelectedRequest(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500"
               >
                 Cancel
               </button>
@@ -550,32 +550,32 @@ const FeedbackManagement = () => {
 
       {/* Response Modal */}
       {selectedFeedback && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-            <h3 className="text-lg font-medium mb-4">Respond to Feedback</h3>
-            <div className="mb-4 p-4 bg-gray-50 rounded">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4">
+            <h3 className="text-lg font-medium mb-4 dark:text-white">Respond to Feedback</h3>
+            <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded dark:text-gray-300">
               <p><strong>Subject:</strong> {selectedFeedback.subject}</p>
               <p><strong>Message:</strong> {selectedFeedback.message}</p>
             </div>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Response</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Response</label>
                 <textarea
                   value={responseData.adminResponse}
                   onChange={(e) => setResponseData({...responseData, adminResponse: e.target.value})}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
                   rows="4"
                   placeholder="Enter your response..."
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700">Status</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
                 <select
                   value={responseData.status}
                   onChange={(e) => setResponseData({...responseData, status: e.target.value})}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
                 >
                   <option value="in_progress">In Progress</option>
                   <option value="resolved">Resolved</option>
@@ -586,7 +586,7 @@ const FeedbackManagement = () => {
             <div className="flex justify-end space-x-3 mt-6">
               <button
                 onClick={() => setSelectedFeedback(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500"
               >
                 Cancel
               </button>
