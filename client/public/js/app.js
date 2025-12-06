@@ -505,6 +505,14 @@ function renderAuthForm(role, mode) {
                         <i class="fas fa-eye" id="password-toggle-icon"></i>
                     </button>
                 </div>
+                ${mode === 'login' ? `
+                    <div class="mt-2 text-right">
+                        <a href="forgot-password.html" 
+                           class="text-sm text-[#56AE67] hover:text-[#3d8b4f] dark:text-[#6bc481] dark:hover:text-[#7dd091] font-medium transition">
+                            <i class="fas fa-key mr-1"></i>Forgot Password?
+                        </a>
+                    </div>
+                ` : ''}
                 ${isStudentRegister ? `
                     <div class="mt-3 bg-green-50 dark:bg-green-900/20 border-l-4 border-[#56AE67] p-3 rounded">
                         <p class="text-xs text-[#3d8b4f] dark:text-[#7dd091] font-semibold mb-1">
