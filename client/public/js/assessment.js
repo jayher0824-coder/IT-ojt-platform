@@ -141,10 +141,16 @@ async function startAssessment(category = null) {
     }
     try {
         // Get available assessments
+        console.log('Fetching assessments from API...');
         const response = await apiCall('/assessments');
-        const assessments = response.data;
+        console.log('API response:', response);
+        
+        // The API returns { success: true, data: [...] }
+        const assessments = response.data || [];
+        console.log('Assessments received:', assessments.length);
 
-        if (assessments.length === 0) {
+        if (!Array.isArray(assessments) || assessments.length === 0) {
+            console.error('No assessments available. Response:', response);
             showToast('No assessments available. Please contact support.', 'error');
             return;
         }
@@ -251,7 +257,20 @@ async function startAssessment(category = null) {
 
     } catch (error) {
         console.error('Error starting assessment:', error);
-        showToast('Failed to start assessment. Please try again.', 'error');
+        console.error('Error details:', {
+            message: error.message,
+            response: error.response,
+            authToken: !!authToken
+        });
+        
+        if (error.message && error.message.includes('401')) {
+            showToast('Session expired. Please log in again.', 'error');
+            setTimeout(() => {
+                logout();
+            }, 2000);
+        } else {
+            showToast('Failed to start assessment. Please try again.', 'error');
+        }
     }
 }
 
