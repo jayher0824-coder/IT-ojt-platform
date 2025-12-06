@@ -62,7 +62,10 @@ function openCreateAssessmentModal(jobId) {
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Questions</h3>
                             <button onclick="addAssessmentQuestion()" 
-                                class="px-4 py-2 bg-[#56AE67] text-white rounded-lg hover:bg-[#3d8b4f] transition">
+                                class="px-4 py-2 text-white rounded-lg hover:bg-[#3d8b4f] transition font-medium"
+                                style="background-color: #56AE67; color: white;"
+                                onmouseover="this.style.backgroundColor='#3d8b4f'" 
+                                onmouseout="this.style.backgroundColor='#56AE67'">
                                 <i class="fas fa-plus mr-2"></i>Add Question
                             </button>
                         </div>
