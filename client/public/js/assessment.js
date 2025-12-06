@@ -143,14 +143,31 @@ async function startAssessment(category = null) {
         // Get available assessments
         console.log('Fetching assessments from API...');
         const response = await apiCall('/assessments');
-        console.log('API response:', response);
+        console.log('Full API response:', JSON.stringify(response, null, 2));
+        console.log('Response type:', typeof response);
+        console.log('Response keys:', Object.keys(response || {}));
         
-        // The API returns { success: true, data: [...] }
-        const assessments = response.data || [];
-        console.log('Assessments received:', assessments.length);
+        // The API returns { success: true, data: [...], count: 1 }
+        // response.data should be the array of assessments
+        let assessments = [];
+        
+        if (response && typeof response === 'object') {
+            if (Array.isArray(response.data)) {
+                assessments = response.data;
+            } else if (Array.isArray(response)) {
+                // In case the response itself is the array
+                assessments = response;
+            } else {
+                console.error('Unexpected response structure:', response);
+            }
+        }
+        
+        console.log('Assessments extracted:', assessments);
+        console.log('Assessments count:', assessments.length);
+        console.log('Is array:', Array.isArray(assessments));
 
         if (!Array.isArray(assessments) || assessments.length === 0) {
-            console.error('No assessments available. Response:', response);
+            console.error('No assessments available. Full response:', response);
             showToast('No assessments available. Please contact support.', 'error');
             return;
         }
