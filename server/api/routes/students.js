@@ -9,6 +9,7 @@ const Student = require('../../database/models/Student');
 const Job = require('../../database/models/Job');
 const User = require('../../database/models/User');
 const { AssessmentResult } = require('../../database/models/Assessment');
+const CustomAssessmentSubmission = require('../../database/models/CustomAssessmentSubmission');
 
 const router = express.Router();
 
@@ -677,6 +678,9 @@ router.delete('/account', protect, authorize('student'), async (req, res) => {
     // Delete assessment results
     await AssessmentResult.deleteMany({ student: student._id });
 
+    // Delete custom assessment submissions
+    await CustomAssessmentSubmission.deleteMany({ student: req.user._id });
+
     // Delete student profile
     await Student.findByIdAndDelete(student._id);
 
@@ -688,10 +692,11 @@ router.delete('/account', protect, authorize('student'), async (req, res) => {
       message: 'Account deleted successfully',
     });
   } catch (error) {
-    console.error(error);
+    console.error('Delete account error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
