@@ -2334,15 +2334,15 @@ async function viewSubmissionDetails(submissionId) {
                     <div class="submission-details-scroll">
                     <div class="mb-6 grid md:grid-cols-3 gap-4">
                         <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
-                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Final Score</p>
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Final Score</p>
                             <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${submission.score}%</p>
                         </div>
                         <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg border border-green-100 dark:border-green-800">
-                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Correct Answers</p>
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Correct Answers</p>
                             <p class="text-3xl font-bold text-green-600 dark:text-green-400">${submission.answers?.filter(a => a.isCorrect).length || 0}/${submission.answers?.length || 0}</p>
                         </div>
                         <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
-                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Time Taken</p>
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Time Taken</p>
                             <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">${formatDuration(submission.timeTaken)}</p>
                         </div>
                     </div>
@@ -2400,7 +2400,7 @@ async function viewSubmissionDetails(submissionId) {
                                                 <div class="flex items-start gap-2">
                                                     <i class="fas fa-user-circle text-blue-500 dark:text-blue-400 mt-1"></i>
                                                     <div class="flex-1">
-                                                        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Student's Answer</p>
+                                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase mb-1">Student's Answer</p>
                                                         <p class="text-gray-900 dark:text-gray-100 font-medium">${displayStudentAnswer}</p>
                                                     </div>
                                                 </div>
@@ -2408,7 +2408,7 @@ async function viewSubmissionDetails(submissionId) {
                                                 <div class="border-t border-gray-200 dark:border-gray-600 pt-3 flex items-start gap-2">
                                                     <i class="fas fa-check-circle text-green-500 dark:text-green-400 mt-1"></i>
                                                     <div class="flex-1">
-                                                        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Correct Answer</p>
+                                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase mb-1">Correct Answer</p>
                                                         <p class="text-green-700 dark:text-green-300 font-medium">${displayCorrectAnswer}</p>
                                                     </div>
                                                 </div>
@@ -5068,18 +5068,18 @@ async function viewStudentAssessmentDetails(resultId) {
                                                 <div class="flex items-start gap-3 p-3 rounded-lg ${isCorrect ? 'bg-blue-50 dark:bg-blue-900/30' : 'bg-red-50 dark:bg-red-900/30'}">
                                                     <i class="fas fa-user-circle text-blue-500 dark:text-blue-400 text-lg mt-1"></i>
                                                     <div class="flex-1">
-                                                        <p class="text-xs font-bold uppercase mb-2 tracking-wide" style="color: #1e40af;">Your Answer</p>
-                                                        <p class="font-semibold text-base" style="color: #1e3a8a;">${answer.userAnswer || answer.selectedAnswer || answer.answer || '<span class="text-gray-500 dark:text-gray-400 italic">No answer provided</span>'}</p>
+                                                        <p class="text-xs font-bold uppercase mb-2 tracking-wide text-blue-700 dark:text-blue-300">Your Answer</p>
+                                                        <p class="font-semibold text-base text-blue-900 dark:text-blue-100">${answer.userAnswer || answer.selectedAnswer || answer.answer || '<span class="text-gray-500 dark:text-gray-400 italic">No answer provided</span>'}</p>
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="flex items-start gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/30 border-2 border-green-300 dark:border-green-700">
                                                     <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-lg mt-1"></i>
                                                     <div class="flex-1">
-                                                        <p class="text-xs font-bold uppercase mb-2 tracking-wide flex items-center gap-2" style="color: #166534;">
+                                                        <p class="text-xs font-bold uppercase mb-2 tracking-wide flex items-center gap-2 text-green-700 dark:text-green-300">
                                                             ✓ Correct Answer
                                                         </p>
-                                                        <p class="font-bold text-base" style="color: #14532d;">${answer.correctAnswer || answer.correct_answer || answer.correctOption || (answer._doc && answer._doc.correctAnswer) || 'Not Available'}</p>
+                                                        <p class="font-bold text-base text-green-900 dark:text-green-100">${answer.correctAnswer || answer.correct_answer || answer.correctOption || (answer._doc && answer._doc.correctAnswer) || 'Not Available'}</p>
                                                     </div>
                                                 </div>
                                                 
